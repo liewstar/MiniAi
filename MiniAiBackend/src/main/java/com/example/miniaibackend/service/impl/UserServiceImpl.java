@@ -48,6 +48,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             return 0;
         }
 
+
+    }
+
+    public int addUser(User user) {
+        return userMapper.insert(user);
     }
 }
 

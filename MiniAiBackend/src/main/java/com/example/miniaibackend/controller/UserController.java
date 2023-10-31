@@ -16,12 +16,12 @@ public class UserController {
     UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<User> getUser(String username, String password) {
+    public ResponseEntity<?> getUser(String username, String password) {
         User user = userService.checkUser(username, password);
         if (user != null) {
             return ResponseEntity.ok(user);
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("password or username error");
         }
     }
 
@@ -32,6 +32,16 @@ public class UserController {
             return ResponseEntity.ok("change success");
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("password error");
+        }
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> register(User user) {
+        int i = userService.addUser(user);
+        if (i > 0) {
+            return ResponseEntity.ok(user);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("args error");
         }
     }
 }
