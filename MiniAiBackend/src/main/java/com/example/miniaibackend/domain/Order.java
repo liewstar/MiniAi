@@ -6,43 +6,46 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.math.BigDecimal;
-
+import java.util.Date;
 import lombok.Data;
 
 /**
  * 
- * @TableName user
+ * @TableName order
  */
-@TableName(value ="user")
+@TableName(value ="order")
 @Data
-public class User implements Serializable {
+public class Order implements Serializable {
     /**
      * 
      */
-    @TableId(type = IdType.AUTO)
+    @TableId
     private Integer id;
 
     /**
      * 
      */
-    private String username;
+    private Integer userId;
 
     /**
      * 
      */
-    private String password;
+    private Date orderDate;
 
     /**
      * 
      */
-    private String email;
+    private BigDecimal orderAmount;
 
     /**
      * 
      */
-    private String role;
+    private Date startDate;
 
-    private BigDecimal balance;
+    /**
+     * 
+     */
+    private Date endDate;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

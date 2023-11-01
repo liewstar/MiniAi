@@ -5,17 +5,16 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
-import java.math.BigDecimal;
-
+import java.util.Date;
 import lombok.Data;
 
 /**
  * 
- * @TableName user
+ * @TableName message
  */
-@TableName(value ="user")
+@TableName(value ="message")
 @Data
-public class User implements Serializable {
+public class Message implements Serializable {
     /**
      * 
      */
@@ -25,24 +24,22 @@ public class User implements Serializable {
     /**
      * 
      */
-    private String username;
+    private Integer conversationId;
 
     /**
      * 
      */
-    private String password;
+    private Integer userId;
 
     /**
      * 
      */
-    private String email;
+    private String content;
 
     /**
      * 
      */
-    private String role;
-
-    private BigDecimal balance;
+    private Date timestamp;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
