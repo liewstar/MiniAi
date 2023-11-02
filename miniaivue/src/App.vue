@@ -10,6 +10,9 @@
 
 
   <!-- Navbar Dropdown 1 row -->
+  <div class="bg-slate-50">
+
+
   <section>
     <div class="h-auto w-screen bg-black text-white">
       <!-- NAVBAR -->
@@ -30,15 +33,16 @@
 <!--              </a>-->
 
 <!--            </div>-->
-            <a href="#" class="font-inter rounded-lg hover:text-[#c9fd02] lg:px-6 lg:py-4">首页</a>
-            <a href="#" class="font-inter rounded-lg hover:text-[#c9fd02] lg:px-6 lg:py-4">定价</a>
+            <router-link to="/" class="font-inter rounded-lg hover:text-[#c9fd02] lg:px-6 lg:py-4">首页</router-link>
+            <router-link to="/price" class="font-inter rounded-lg hover:text-[#c9fd02] lg:px-6 lg:py-4">定价</router-link>
             <a href="#" class="font-inter rounded-lg hover:text-[#c9fd02] lg:px-6 lg:py-4">常见问题</a>
-            <a href="#" class="font-inter rounded-lg pb-8 hover:text-[#c9fd02] lg:px-6 lg:py-4 lg:pb-0">关于</a>
+            <router-link to="/about" class="font-inter rounded-lg pb-8 hover:text-[#c9fd02] lg:px-6 lg:py-4 lg:pb-0">关于</router-link>
           </div>
           <!-- MENU CONTENT 2 -->
           <div class="flex flex-col space-y-8 lg:flex lg:flex-row lg:space-x-3 lg:space-y-0" x-bind:class="isOpen ? 'show' : 'hidden'">
-            <a href="https://build.flowspark.co/template" target="_blank" class="inline-block rounded-full bg-white px-5 py-3 text-center font-bold text-black transition hover:border-black hover:bg-[#c9fd02]">Get Started</a>
+            <router-link to="/login" target="_blank" class="inline-block rounded-full bg-white px-5 py-3 text-center font-bold text-black transition hover:border-black hover:bg-[#c9fd02]">去注册</router-link>
           </div>
+
 <!--          &lt;!&ndash; BURGER MENU &ndash;&gt;-->
 <!--          <a href="#" class="absolute right-5 lg:hidden" x-on:click.prevent="isOpen = !isOpen">-->
 <!--            <svg width="1.25rem" height="1rem" viewBox="0 0 20 16" fill="none" xmlns="http://www.w3.org/2000/svg">-->
@@ -50,7 +54,14 @@
         </div>
       </nav>
     </div>
+
+    <router-view></router-view>
+    <footer>
+      <Footer/>
+    </footer>
   </section>
+  </div>
+
 
 
 
@@ -59,8 +70,10 @@
 <script>
 
 
+import Footer from "@/views/Footer";
 export default {
   name: 'App',
+  components: {Footer},
 }
 </script>
 
