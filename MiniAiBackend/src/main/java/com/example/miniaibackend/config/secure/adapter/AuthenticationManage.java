@@ -26,6 +26,12 @@ public class AuthenticationManage implements AuthenticationManager {
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
+    /**
+     * 判断密码是否正确
+     * @param authentication
+     * @return
+     * @throws AuthenticationException
+     */
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username = (String) authentication.getCredentials();

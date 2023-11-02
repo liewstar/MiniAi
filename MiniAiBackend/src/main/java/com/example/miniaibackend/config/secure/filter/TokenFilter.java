@@ -34,7 +34,7 @@ public class TokenFilter extends OncePerRequestFilter {
         response.setContentType("application/json;charset=utf-8");
         url = request.getRequestURI();
         String token = request.getHeader("token");
-        Boolean isFilter = filterUri("/user/login");
+        Boolean isFilter = filterUri("/user/login");// 设置不需要被token拦截的URL
         if (!isFilter){
             if (!token.equals("")) {
                 String username = tokenUtils.getUserNameInToken(token);

@@ -17,6 +17,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 验证用户是否存在
+ */
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 

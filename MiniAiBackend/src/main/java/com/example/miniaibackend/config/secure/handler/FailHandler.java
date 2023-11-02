@@ -13,6 +13,9 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * 失败返回
+ */
 @Component
 public class FailHandler implements AuthenticationFailureHandler {
 
