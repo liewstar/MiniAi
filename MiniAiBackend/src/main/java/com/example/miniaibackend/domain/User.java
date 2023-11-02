@@ -41,6 +41,7 @@ public class User implements Serializable {
      * 
      */
     private String role;
+    // TODO: 请把这个role单独成立一个表，不要和User放在一起，这样很容易出问题
 
     private BigDecimal balance;
 
