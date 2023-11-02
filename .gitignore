@@ -32,3 +32,9 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Spring Boot ###
+MiniAiBackend/.idea/
+MiniAiBackend/.mvn/
+MiniAiBackend/mvnw.cmd
+MiniAiBackend/mvnw
