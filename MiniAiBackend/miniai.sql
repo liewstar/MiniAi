@@ -106,7 +106,6 @@ CREATE TABLE `user` (
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
-  `role` varchar(255) NOT NULL,
   `balance` decimal(10,2) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -116,9 +115,28 @@ CREATE TABLE `user` (
 -- Dumping data for table `user`
 --
 
+DROP TABLE IF EXISTS `roles`;
+CREATE TABLE IF NOT EXISTS `roles` (
+    `id` int NOT NULL AUTO_INCREMENT,
+    `role_name` varchar(50) NOT NULL,
+    primary key (`id`)
+);
+
+drop table IF EXISTS `role_to_user`;
+create table IF NOT EXISTS `role_to_user`(
+    `id` int not null auto_increment,
+    `user_id` int not null,
+    `role_id` int not null,
+    primary key (`id`)
+
+);
+
+insert into `roles` values (1, 'USER'),(2, 'ADMIN');
+insert into `role_to_user` values (1, 1, 1),(2, 2, 1),(3, 3, 1);
+
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'liaoxin','88888','1312@qq.com','user',NULL),(2,'1','2','2','2',NULL),(3,'2','1','2','2',NULL);
+INSERT INTO `user` VALUES (1,'liaoxin','88888','1312@qq.com',NULL),(2,'1','2','2',NULL),(3,'2','1','2',NULL);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
