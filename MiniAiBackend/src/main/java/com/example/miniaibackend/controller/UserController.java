@@ -15,6 +15,7 @@ public class UserController {
     @Resource
     UserService userService;
 
+    // TODO: 这里的URL不需要存在，如果需要将登录的时候的请求变成JSON形式这边也没有必要存在
     @PostMapping("/login")
     public ResponseEntity<?> getUser(String username, String password) {
         User user = userService.checkUser(username, password);
