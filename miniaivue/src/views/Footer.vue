@@ -28,7 +28,7 @@
             <img src="https://assets.website-files.com/63904f663019b0d8edf8d57c/639972bf10337117b26b8e51_Frame%205481.svg" alt="" class="inline-block" />
           </a>
         </div>
-        <p class="max-[479px]:text-sm">© Copyright 2021. All rights reserved.</p>
+        <p class="max-[479px]:text-sm">© Copyright 2023. All rights reserved.</p>
       </div>
     </div>
   </footer>

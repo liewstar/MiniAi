@@ -1,3 +1,11 @@
 @import '~tailwindcss/base.css';
 @import '~tailwindcss/components.css';
 @import "~tailwindcss/utilities.css";
+body::-webkit-scrollbar {
+    width: 10px; /* 设置滚动条宽度 */
+    background-color: transparent; /* 设置滚动条背景颜色为透明 */
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: transparent; /* 设置滚动条拖动部分的颜色为透明 */
+}
