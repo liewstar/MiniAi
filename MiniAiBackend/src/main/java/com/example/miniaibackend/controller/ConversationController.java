@@ -12,6 +12,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/conversation")
+/*
+* 用户新建会话
+* 用户删除自己的会话
+* 用户查看自己的会话
+* 管理员查看会话
+* */
 public class ConversationController {
 
     @Resource

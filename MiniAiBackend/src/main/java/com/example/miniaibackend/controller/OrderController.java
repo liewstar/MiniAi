@@ -15,6 +15,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/order")
+/*
+* 用户新增订单
+* 管理员查看订单
+* 用户查看订单到期时间
+* */
 public class OrderController {
     @Resource
     OrderService orderService;

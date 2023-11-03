@@ -12,6 +12,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/message")
+/*
+* 用户新建消息
+* 用户查看自己的消息
+* 管理员查看消息
+* */
 public class MessageController {
     @Resource
     MessageService messageService;

@@ -33,14 +33,14 @@
               <!--              </a>-->
 
               <!--            </div>-->
-              <router-link to="/" class="font-inter rounded-lg hover:text-[#c9fd02] lg:px-6 lg:py-4">首页</router-link>
-              <router-link to="/price" class="font-inter rounded-lg hover:text-[#c9fd02] lg:px-6 lg:py-4">定价</router-link>
-              <a href="#" class="font-inter rounded-lg hover:text-[#c9fd02] lg:px-6 lg:py-4">常见问题</a>
+              <router-link to="/" class="font-inter rounded-lg hover:text-[#c9fd02] lg:px-6 lg:py-4">用户管理</router-link>
+              <router-link to="/price" class="font-inter rounded-lg hover:text-[#c9fd02] lg:px-6 lg:py-4">订单管理</router-link>
+              <a href="#" class="font-inter rounded-lg hover:text-[#c9fd02] lg:px-6 lg:py-4">数据统计</a>
               <router-link to="/about" class="font-inter rounded-lg pb-8 hover:text-[#c9fd02] lg:px-6 lg:py-4 lg:pb-0">关于</router-link>
             </div>
             <!-- MENU CONTENT 2 -->
             <div class="flex flex-col space-y-8 lg:flex lg:flex-row lg:space-x-3 lg:space-y-0" x-bind:class="isOpen ? 'show' : 'hidden'">
-              <router-link to="/register" target="_blank" class="inline-block rounded-full bg-white px-5 py-3 text-center font-bold text-black transition hover:border-black hover:bg-[#c9fd02]">去注册</router-link>
+              <router-link to="/register" class="inline-block rounded-full bg-white px-5 py-3 text-center font-bold text-black transition hover:border-black hover:bg-[#c9fd02]">去网站</router-link>
             </div>
 
             <!--          &lt;!&ndash; BURGER MENU &ndash;&gt;-->
@@ -54,6 +54,7 @@
           </div>
         </nav>
       </div>
+      123
       <router-view></router-view>
       <footer>
         <Footer/>
@@ -61,21 +62,14 @@
     </section>
   </div>
 
-
-
 </template>
 
 <script>
-import Footer from "@/views/Footer";
-
 export default {
-  name: "MainLayout",
-  components: {Footer},
-  methods: {
-  }
+  name: "AdminMain"
 }
 </script>
 
 <style scoped>
-@import '../assets/css/main.css';
+
 </style>
