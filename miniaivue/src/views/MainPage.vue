@@ -4,31 +4,24 @@
       <div class="col-span-2">
         <!-- 左侧历史消息对话框 -->
           <div style="height: 720px" class="bg-black rounded-lg p-4 shadow text-white overflow-y-auto scrollbar scrollbar-content">
-                <Conversation :time="time" :title="title"/>
-                <Conversation :time="time" :title="title"/>
-                <Conversation :time="time" :title="title"/>
-                <Conversation :time="time" :title="title"/>
-                <Conversation :time="time" :title="title"/>
-                <Conversation :time="time" :title="title"/>
-                <Conversation :time="time" :title="title"/>
-                <Conversation :time="time" :title="title"/>
-                <Conversation :time="time" :title="title"/>
-                <Conversation :time="time" :title="title"/>
-                <Conversation :time="time" :title="title"/>
-                <Conversation :time="time" :title="title"/>
+            <div>
+              <Conversation :time="time" :title="title"/>
+              <Conversation :time="time" :title="title"/>
+              <Conversation :time="time" :title="title"/>
+              <Conversation :time="time" :title="title"/>
+              <Conversation :time="time" :title="title"/>
+            </div>
           </div>
 
-        <form name="email-form" method="get" class="relative w-full max-w-[100%]">
-             <el-button icon="el-icon-s-tools" type="primary" class="w-1/4"></el-button>
-             <el-button icon="el-icon-circle-plus" class="w-1/2">新的聊天</el-button>
+        <form name="email-form" method="get" class="relative w-full mt-4">
+             <el-button @click="toPersonal" style=" background-color: black;"><i class="el-icon-s-tools"></i></el-button>
+             <el-button @click="newChat" class="right-20" style="background-color: black" ><i class="el-icon-circle-plus"></i> <span style="color: white">新的聊天</span></el-button>
         </form>
 
       </div>
       <div style="height: 100%" class="col-span-10">
         <div class="h-full w-full bg-white rounded-lg p-4 shadow relative">
-          <!-- 右侧内容 -->
           <router-view/>
-
         </div>
       </div>
     </div>
@@ -48,6 +41,14 @@ export default {
       time: "2023-12-11",
       title: "title"
 
+    }
+  },
+  methods:{
+    toPersonal(){
+      this.$router.push("/chat/me")
+    },
+    newChat(){
+      this.$router.push("/chat/sendMessage")
     }
   }
 }
@@ -82,6 +83,9 @@ export default {
 
 .scrollbar::-webkit-scrollbar-thumb:hover {
   background-color: #555;
+}
+.el-button i {
+  color: white;
 }
 
 

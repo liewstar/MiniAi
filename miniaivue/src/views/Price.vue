@@ -1,18 +1,12 @@
 <template>
 
   <section>
-    <!-- Container -->
     <div class="mx-auto max-w-7xl px-5 py-16 md:px-10 md:py-24 lg:py-32">
-      <!-- Heading Container -->
       <div class="mx-auto mb-8 max-w-3xl text-center md:mb-12 lg:mb-16">
-        <!-- Heading -->
         <h2 class="text-3xl font-bold md:text-5xl">MiniAi Pricing</h2>
-        <!-- Subheading -->
         <p class="mt-4 text-sm text-[#636262] sm:text-base">新注册用户可以享受14天的免费试用</p>
       </div>
-      <!-- Price Container -->
       <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 md:gap-4">
-        <!-- Price  -->
         <div class="b mx-auto flex w-full max-w-md flex-col items-start rounded-md border border-[#cdcdcd] p-8">
           <div class="mb-4 rounded-[4px] bg-black px-4 py-1.5">
             <p class="text-sm font-bold text-white sm:text-sm">基础版</p>
@@ -25,20 +19,7 @@
             <img src="https://assets.website-files.com/6458c625291a94a195e6cf3a/6458c625291a94a84be6cf60_check-mark.svg" alt="" class="mr-2 inline-block w-4" />
             <p class="text-base">每日限制100条对话</p>
           </div>
-<!--          <div class="mt-2 flex items-center">-->
-<!--            <img src="https://assets.website-files.com/6458c625291a94a195e6cf3a/6458c625291a94a84be6cf60_check-mark.svg" alt="" class="mr-2 inline-block w-4" />-->
-<!--            <p class="text-base">Exclusive Freebies</p>-->
-<!--          </div>-->
-<!--          <div class="mt-2 flex items-center">-->
-<!--            <img src="https://assets.website-files.com/6458c625291a94a195e6cf3a/6458c625291a94a84be6cf60_check-mark.svg" alt="" class="mr-2 inline-block w-4" />-->
-<!--            <p class="text-base">Monthly Free Exclusive</p>-->
-<!--          </div>-->
-<!--          <div class="mt-2 flex items-center">-->
-<!--            <img src="https://assets.website-files.com/6458c625291a94a195e6cf3a/6458c625291a94a84be6cf60_check-mark.svg" alt="" class="mr-2 inline-block w-4" />-->
-<!--            <p class="text-base">Customer Support</p>-->
-<!--          </div>-->
         </div>
-        <!-- Price  -->
         <div class="b mx-auto flex w-full max-w-md flex-col items-start rounded-md border border-[#cdcdcd] bg-[#f2f2f7] p-8">
           <div class="mb-4 rounded-[4px] bg-black px-4 py-1.5">
             <p class="text-sm font-bold text-white sm:text-sm">进阶版</p>
@@ -59,12 +40,7 @@
             <img src="https://assets.website-files.com/6458c625291a94a195e6cf3a/6458c625291a94a84be6cf60_check-mark.svg" alt="" class="mr-2 inline-block w-4" />
             <p class="text-base">云端同步</p>
           </div>
-<!--          <div class="mt-2 flex items-center">-->
-<!--            <img src="https://assets.website-files.com/6458c625291a94a195e6cf3a/6458c625291a94a84be6cf60_check-mark.svg" alt="" class="mr-2 inline-block w-4" />-->
-<!--            <p class="text-base">Customer Support</p>-->
-<!--          </div>-->
         </div>
-        <!-- Price  -->
         <div class="b mx-auto flex w-full max-w-md flex-col items-start rounded-md border border-[#cdcdcd] p-8">
           <div class="mb-4 rounded-[4px] bg-black px-4 py-1.5">
             <p class="text-sm font-bold text-white sm:text-sm">专业版</p>

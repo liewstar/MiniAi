@@ -42,6 +42,7 @@ const routes = [
                 name: 'Register',
                 component: Register
             },
+
             {
                 path: '/chat',
                 name: 'Chat',

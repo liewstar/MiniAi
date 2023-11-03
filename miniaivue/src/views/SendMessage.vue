@@ -1,18 +1,18 @@
 <template>
 <div>
-  <div class="ml-64 col-span-2 flex flex-col overflow-y-auto scrollbar scrollbar-content" style="width: 60%;height: 600px">
-    <message/>
-    <message/>
-    <message/>
-    <message/>
+  <div class="ml-64 col-span-2 flex flex-col overflow-y-auto scrollbar scrollbar-content" style="width: 60%;height: 600px" ref="messageContainer">
+    <div v-for="message in arrMessage" :key="message.id"  >
+      <message :content="message.content"/>
+    </div>
+
   </div>
 
   <div class="w-full absolute left-1/2 transform -translate-x-1/2 bottom-3">
     <div class="mx-auto mb-4 flex w-3/4 justify-center">
-      <form name="email-form" method="get" class="relative w-full max-w-[75%]">
-        <input type="email" class="rounded-lg h-9 w-full border border-solid border-black bg-white px-3 py-6 text-sm text-[#333333]" placeholder="向MiniAi提问" required="" />
-        <input type="submit" value="发送" class="rounded-lg relative right-0 top-[5px] w-full cursor-pointer bg-black px-6 py-2 text-center font-semibold text-white sm:absolute sm:right-[5px] sm:w-auto" />
-      </form>
+      <div class="relative w-full max-w-[75%]">
+        <input v-model="msg" @keyup.enter="sendMsg" class="rounded-lg h-9 w-full border border-solid border-black bg-white px-3 py-6 text-sm text-[#333333]" placeholder="向MiniAi提问" />
+        <input type="submit" @click="sendMsg" value="发送" class="rounded-lg relative right-0 top-[5px] w-full cursor-pointer bg-black px-6 py-2 text-center font-semibold text-white sm:absolute sm:right-[5px] sm:w-auto" />
+      </div>
     </div>
   </div>
 </div>
@@ -22,7 +22,31 @@
 import Message from "@/components/Message";
 export default {
   name: "SendMessage",
-  components: {Message}
+  components: {Message},
+  methods:{
+    sendMsg(){
+      //准备消息体
+      const message = {
+        id: this.arrMessage.length+1,
+        content: this.msg,
+      };
+      //发送消息体到数组
+      this.arrMessage.push(message);
+      //清空输入框
+      this.msg = ''
+      // 更新消息列表后滚动到底部
+      this.$nextTick(() => {
+        const container = this.$refs.messageContainer;
+        container.scrollTop = container.scrollHeight;
+      });
+    },
+  },
+  data(){
+    return{
+      msg:'',
+      arrMessage: [],
+    }
+  }
 }
 </script>
 

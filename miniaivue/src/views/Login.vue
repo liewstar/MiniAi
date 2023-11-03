@@ -1,17 +1,9 @@
 <template>
 
   <section>
-    <!-- Container -->
     <div class="mx-auto w-full max-w-3xl px-5 py-16 md:px-10 md:py-24 lg:py-32">
-      <!-- Component -->
       <div class="mx-auto max-w-xl bg-[#f2f2f7] px-8 py-12 text-center">
         <div class="mx-auto w-full max-w-[400px]">
-<!--          <a href="#" class="flex w-full max-w-full justify-center rounded-md bg-black py-3 text-white">-->
-<!--            <img src="https://assets.website-files.com/6458c625291a94a195e6cf3a/6458c625291a947090e6cf87_GoogleLogo.svg" alt="" class="mr-4 inline-block" />-->
-<!--            <p class="text-sm sm:text-base">Sign up with Google</p>-->
-<!--          </a>-->
-          <!-- Divider -->
-          <!-- Form -->
           <div class="mx-auto mb-4 max-w-[400px] pb-4">
             <form name="wf-form-password" method="get">
               <div class="relative">

@@ -5,6 +5,7 @@ import AdminLayout from "@/views/admin/AdminLayout";
 import UserLayout from "@/views/UserLayout";
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+
 Vue.use(ElementUI);
 
 Vue.component('AdminLayout', AdminLayout)
