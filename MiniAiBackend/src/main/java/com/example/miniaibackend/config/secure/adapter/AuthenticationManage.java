@@ -11,6 +11,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -34,13 +35,13 @@ public class AuthenticationManage implements AuthenticationManager {
      */
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        String username = (String) authentication.getCredentials();
-        String password = (String) authentication.getPrincipal();
+        String password = (String) authentication.getCredentials();
+        String username = (String) authentication.getPrincipal();
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
         userQueryWrapper.eq("username", username);
         User user = userMapper.selectOne(userQueryWrapper);
         String localPassword = user.getPassword();
-        AuthUserDetail userDetail = (AuthUserDetail) userDetailsService.loadUserByUsername(username);
+        UserDetails userDetail = userDetailsService.loadUserByUsername(username);
         if (!passwordEncoder.matches(password, localPassword)){
             throw new BadCredentialsException("密码不正确");
         }

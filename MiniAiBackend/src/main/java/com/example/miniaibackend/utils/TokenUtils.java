@@ -25,12 +25,13 @@ public class TokenUtils {
      * @param username 用户名
      * @return token验证令牌
      */
-    public String generateToken(String username){
+    public String generateToken(String username, Integer id){
         Date expireDate = new Date(System.currentTimeMillis() + 1000*expire);
 
         return Jwts.builder().setExpiration(expireDate)
                 .setHeaderParam("header", header)
                 .claim("username", username)
+                .claim("userId", id)
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
     }
 
