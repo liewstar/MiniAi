@@ -11,6 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/users")
+/*
+* 用户登录
+* 用户注册
+* 用户修改密码
+* */
 public class UserController {
     @Resource
     UserService userService;

@@ -11,12 +11,18 @@
     <description>Demo project for Spring Boot</description>
     <properties>
         <java.version>17</java.version>
+        <!--suppress UnresolvedMavenProperty -->
         <datasource.url>${env.DATASOURCE_URL}</datasource.url>
+        <!--suppress UnresolvedMavenProperty -->
         <datasource.username>${env.DATASOURCE_USERNAME}</datasource.username>
+        <!--suppress UnresolvedMavenProperty -->
         <datasource.password>${env.DATASOURCE_PASSWORD}</datasource.password>
 
+        <!--suppress UnresolvedMavenProperty -->
         <jwt.expire>${env.JWT_EXPIRE}</jwt.expire>
+        <!--suppress UnresolvedMavenProperty -->
         <jwt.secret>${env.JWT_SECRET}</jwt.secret>
+        <!--suppress UnresolvedMavenProperty -->
         <jwt.header>${env.JWT_HEADER}</jwt.header>
     </properties>
     <dependencies>
