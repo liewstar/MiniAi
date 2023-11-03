@@ -27,6 +27,8 @@ export default {
         { name: '模型', value: '' },
         { name: '随机性', value: 0 },
         { name: '话题新鲜度', value: 0 },
+        { name: '单次回复限制', value: 0 },
+        { name: '附带历史消息数', value: 0 },
       ]
     }
   }
