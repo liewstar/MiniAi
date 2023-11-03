@@ -13,6 +13,6 @@ public interface UserService extends IService<User> {
 
     int changePassword(String username, String oldPassword, String newPassword);
 
-    int addUser(User user);
+    boolean addUser(User user);
 
 }

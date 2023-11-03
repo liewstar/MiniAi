@@ -48,7 +48,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private org.springframework.security.core.userdetails.User getDetailUser(User user){
         QueryWrapper<Roles> rolesQueryWrapper = new QueryWrapper<>();
         QueryWrapper<RoleToUser> roleToUserQueryWrapper = new QueryWrapper<>();
-        roleToUserQueryWrapper.eq("userId", user.getId());
+        roleToUserQueryWrapper.eq("user_id", user.getId());
         List<RoleToUser> roleToUserList = roleToUserMapper.selectList(roleToUserQueryWrapper);
         List<Roles> roles = new ArrayList<>();
         for (RoleToUser roleToUser : roleToUserList){

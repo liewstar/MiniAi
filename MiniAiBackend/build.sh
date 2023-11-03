@@ -1,3 +1,5 @@
+mvn clean;
+
 export DATASOURCE_URL="jdbc:mysql://localhost:3306/miniai?useUnicode=true&characterEncoding=utf8"
 export DATASOURCE_USERNAME="root"
 export DATASOURCE_PASSWORD="liaoxin0328"

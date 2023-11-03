@@ -25,19 +25,23 @@ public class User implements Serializable {
     /**
      * 
      */
+    @TableField(value = "username")
     private String username;
 
     /**
      * 
      */
+    @TableField(value = "password")
     private String password;
 
     /**
      * 
      */
+    @TableField(value = "email")
     private String email;
 
 
+    @TableField(value = "balance")
     private BigDecimal balance;
 
     @TableField(exist = false)

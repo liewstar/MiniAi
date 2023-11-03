@@ -20,7 +20,6 @@ import java.util.Collection;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-@Component
 public class AuthUserDetail implements UserDetails {
 
     private User user;
