@@ -1,7 +1,5 @@
 package com.example.miniaibackend.config.secure.filter;
 
-import com.alibaba.fastjson.JSON;
-import com.example.miniaibackend.domain.User;
 import com.example.miniaibackend.service.secure.UserDetailsServiceImpl;
 import com.example.miniaibackend.utils.TokenUtils;
 import jakarta.servlet.FilterChain;
