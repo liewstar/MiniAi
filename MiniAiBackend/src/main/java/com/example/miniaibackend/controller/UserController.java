@@ -1,6 +1,8 @@
 package com.example.miniaibackend.controller;
 
 import com.example.miniaibackend.domain.User;
+import com.example.miniaibackend.models.Result;
+import com.example.miniaibackend.models.UserDTO;
 import com.example.miniaibackend.service.UserService;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,13 +50,18 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody User user) {
+    public Result<?> register(@RequestBody UserDTO user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        int i = userService.addUser(user);
-        if (i > 0) {
-            return ResponseEntity.ok(user);
+        User user1 = new User();
+        user1.setUsername(user.getUsername());
+        user1.setPassword(user.getPassword());
+        user1.setEmail(user.getEmail());
+        boolean i = userService.addUser(user1);
+        if (i) {
+            return Result.ok("注册成功");
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("args error");
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("args error");
+            return Result.err(HttpStatus.BAD_REQUEST.value(), "注册失败");
         }
     }
 }

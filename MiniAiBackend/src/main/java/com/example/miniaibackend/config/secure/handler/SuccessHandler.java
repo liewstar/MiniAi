@@ -37,7 +37,6 @@ public class SuccessHandler implements AuthenticationSuccessHandler {
         response.setContentType("application/json;charset=utf-8");
         ServletOutputStream servletOutputStream = response.getOutputStream();
         String username = ((UserDetails)authentication.getPrincipal()).getUsername();
-        System.out.println(username);
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
         userQueryWrapper.eq("username", username);
         User user = userMapper.selectOne(userQueryWrapper);
