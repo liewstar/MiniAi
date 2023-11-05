@@ -14,6 +14,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import javax.security.sasl.AuthenticationException;
 import java.io.IOException;
 
 @Component
@@ -39,18 +40,23 @@ public class TokenFilter extends OncePerRequestFilter {
                 if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                     UserDetails userDetails = userDetailsService.loadUserByUsername(username);
                     if (tokenUtils.isTokenExpire(token)) {
-                        UsernamePasswordAuthenticationToken authenticationToken =
-                                new UsernamePasswordAuthenticationToken(userDetails,
-                                        null,
-                                        userDetails.getAuthorities()
-                                );
-                        authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                        throw new AuthenticationException("TOKEN EXPIRED");
                     }
+                    holdAuthentication(userDetails, request);
                 }
             }
         }
         filterChain.doFilter(request, response);
+    }
+
+    private void holdAuthentication(UserDetails userDetails, HttpServletRequest request){
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(userDetails,
+                        null,
+                        userDetails.getAuthorities()
+                );
+        authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
     }
 
     private Boolean filterUri(String... uri){

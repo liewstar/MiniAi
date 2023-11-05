@@ -3,6 +3,7 @@ package com.example.miniaibackend.config.secure;
 import com.example.miniaibackend.config.secure.adapter.AuthenticationManage;
 import com.example.miniaibackend.config.secure.filter.LoginFilter;
 import com.example.miniaibackend.config.secure.filter.TokenFilter;
+import com.example.miniaibackend.config.secure.handler.AuthenticationExceptionHandler;
 import com.example.miniaibackend.config.secure.handler.FailHandler;
 import com.example.miniaibackend.config.secure.handler.SuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +57,11 @@ public class WebSecurity {
             config.disable();
         });// 关闭验证跨域
 
-        http.addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class);//token filter
+        http.addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class).exceptionHandling(
+                (exception) -> {
+                    exception.authenticationEntryPoint(new AuthenticationExceptionHandler());
+                }
+        );//token filter
         http.addFilterAt(loginFilter(), UsernamePasswordAuthenticationFilter.class);// 使其完成JSON形式的登录
 
         return http.build();

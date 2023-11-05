@@ -1,3 +1,7 @@
+set JAVA_HOME=
+
+mvn clean;
+
 set DATASOURCE_URL="jdbc:mysql://localhost:3306/miniai?useUnicode=true&characterEncoding=utf8"
 set DATASOURCE_USERNAME="root"
 set DATASOURCE_PASSWORD="liaoxin0328"
