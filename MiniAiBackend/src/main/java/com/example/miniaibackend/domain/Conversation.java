@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.util.Date;
+
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
@@ -14,6 +16,7 @@ import lombok.Data;
  */
 @TableName(value ="conversation")
 @Data
+@AllArgsConstructor
 public class Conversation implements Serializable {
     /**
      * 
