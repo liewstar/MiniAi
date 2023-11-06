@@ -23,9 +23,9 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message>
     MessageMapper messageMapper;
 
     @Override
-    public List<Message> getMessage(Integer userId) {
+    public List<Message> getMessage(Integer conversationId) {
         QueryWrapper<Message> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("user_id", userId);
+        queryWrapper.eq("conversation_id", conversationId);
         return messageMapper.selectList(queryWrapper);
     }
 }

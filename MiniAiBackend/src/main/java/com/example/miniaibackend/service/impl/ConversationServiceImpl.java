@@ -1,5 +1,6 @@
 package com.example.miniaibackend.service.impl;
 
+import cn.hutool.core.date.DateTime;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.miniaibackend.domain.Conversation;
@@ -30,6 +31,14 @@ public class ConversationServiceImpl extends ServiceImpl<ConversationMapper, Con
         List<Conversation> conversations = conversationMapper.selectList(queryWrapper);
         return conversations;
     }
+
+    @Override
+    public void addConversation(Integer userId, String title) {
+        Conversation conversation = new Conversation(null,userId,title,new DateTime());
+        conversationMapper.insert(conversation);
+    }
+
+
 }
 
 

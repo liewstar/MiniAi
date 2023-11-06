@@ -4,12 +4,8 @@
       <div class="col-span-2">
         <!-- 左侧历史消息对话框 -->
           <div style="height: 720px" class="bg-black rounded-lg p-4 shadow text-white overflow-y-auto scrollbar scrollbar-content">
-            <div>
-              <Conversation :time="time" :title="title"/>
-              <Conversation :time="time" :title="title"/>
-              <Conversation :time="time" :title="title"/>
-              <Conversation :time="time" :title="title"/>
-              <Conversation :time="time" :title="title"/>
+            <div v-for="conversation in allConversations" :key="conversation.id" @click="clickConversation(conversation.id)">
+              <Conversation :time="conversation.createdTime" :title="conversation.title"/>
             </div>
           </div>
 
@@ -31,25 +27,53 @@
 
 <script>
 import Conversation from "@/components/Conversation";
-
+import api from "@/api";
 export default {
   name: "MainPage",
 
   components: {Conversation},
   data() {
     return {
-      time: "2023-12-11",
-      title: "title"
-
+      allConversations:[
+        {
+          id:'',
+          title:'',
+          userId:'',
+          createdTime:''
+        }
+      ],
     }
   },
   methods:{
+    clickConversation(id){
+      console.log(id)
+      this.$router.push({
+        path: "/chat/sendMessage",
+        query:{
+          conversationId: id
+        }
+      })
+    },
     toPersonal(){
       this.$router.push("/chat/me")
     },
     newChat(){
       this.$router.push("/chat/sendMessage")
+    },
+    getAllConversation() {
+      const userId = 1;
+      api.post("/conversation/getConversation?userId=1",)
+        .then((response) => {
+          this.allConversations = response
+        })
+        .catch((error) => {
+          console.log(userId)
+          console.log(error)
+        })
     }
+  },
+  created() {
+    this.getAllConversation();
   }
 }
 </script>

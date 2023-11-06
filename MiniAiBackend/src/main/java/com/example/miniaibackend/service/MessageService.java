@@ -11,6 +11,6 @@ import java.util.List;
 * @createDate 2023-11-01 08:53:20
 */
 public interface MessageService extends IService<Message> {
-    List<Message> getMessage(Integer userId);
+    List<Message> getMessage(Integer conversationId);
 
 }

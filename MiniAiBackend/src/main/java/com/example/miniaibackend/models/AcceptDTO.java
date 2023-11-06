@@ -1,11 +1,13 @@
 package com.example.miniaibackend.models;
 
+import com.plexpt.chatgpt.entity.chat.Message;
 import lombok.*;
 
 import java.util.List;
 
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class AcceptDTO {
 
     private Integer userId;
@@ -26,14 +28,14 @@ public class AcceptDTO {
     private int maxToken;
 
 
-    private float temperature;
+    private double temperature;
 
 
-    private float presencePenalty;
+    private double presencePenalty;
 
 
-    private float frequencyPenalty;
+    private double frequencyPenalty;
 
 
-    private List<Preset> presetList;
+    private List<Message> messageList;
 }

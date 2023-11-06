@@ -2,7 +2,7 @@
 <div>
   <div class="ml-64 col-span-2 flex flex-col overflow-y-auto scrollbar scrollbar-content" style="width: 60%;height: 600px" ref="messageContainer">
     <div v-for="message in arrMessage" :key="message.id"  >
-      <message :content="message.content"/>
+      <message :is-user="message.userId" :content="message.content"/>
     </div>
 
   </div>
@@ -20,12 +20,23 @@
 
 <script>
 import Message from "@/components/Message";
+import api from "@/api";
 export default {
   name: "SendMessage",
   components: {Message},
+  watch: {
+    '$route.query.conversationId': {
+      handler(newQuery, oldQuery) {
+        console.log("conversationId,from,to" + oldQuery + newQuery)
+        this.getAllMessage(newQuery)
+      },
+      deep: true
+    }
+  },
   methods:{
     sendMsg(){
-      //准备消息体
+      //先查数据库，赋初值
+      //user和bot消息顺序都根据id来
       const message = {
         id: this.arrMessage.length+1,
         content: this.msg,
@@ -40,11 +51,32 @@ export default {
         container.scrollTop = container.scrollHeight;
       });
     },
+    getAllMessage(conversationId) {
+      api.post("/message/getMessage?conversationId="+conversationId)
+        .then((response) => {
+          console.log(response)
+          this.arrMessage = response
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    }
+  },
+  mounted() {
+    this.getAllMessage(this.$route.query.conversationId)
+  },
+  created() {
+
   },
   data(){
     return{
       msg:'',
-      arrMessage: [],
+      arrMessage: [
+        {
+          id:0,
+          content:'',
+        }
+      ],
     }
   }
 }

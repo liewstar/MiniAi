@@ -4,6 +4,7 @@ import com.example.miniaibackend.domain.Order;
 import com.example.miniaibackend.service.OrderService;
 import jakarta.annotation.Resource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/order")
+@CrossOrigin
 /*
 * 用户新增订单
 * 管理员查看订单
