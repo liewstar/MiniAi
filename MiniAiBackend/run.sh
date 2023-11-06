@@ -10,4 +10,4 @@ export JWT_EXPIRE=604800
 export JWT_SECRET="12345678"
 export JWT_HEADER="HEADER"
 
-mvn spring-boot:run -f pom.xml
+mvn spring-boot:run -f pom.xml -Pdev-retriblet

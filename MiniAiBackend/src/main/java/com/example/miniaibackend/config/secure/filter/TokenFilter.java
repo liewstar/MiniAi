@@ -35,15 +35,21 @@ public class TokenFilter extends OncePerRequestFilter {
         String token = request.getHeader("token");
         Boolean isFilter = filterUri("/user/login", "/users/register");// 设置不需要被token拦截的URL
         if (isFilter){
-            if (!token.equals("")) {
-                String username = tokenUtils.getUserNameInToken(token);
-                if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                    UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-                    if (tokenUtils.isTokenExpire(token)) {
-                        throw new AuthenticationException("TOKEN EXPIRED");
+            if (token!=null) {
+                if (!token.equals("")) {
+                    String username = tokenUtils.getUserNameInToken(token);
+                    if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                        if (tokenUtils.isTokenExpire(token)) {
+                            throw new AuthenticationException("TOKEN EXPIRED");
+                        }
+                        holdAuthentication(userDetails, request);
                     }
-                    holdAuthentication(userDetails, request);
+                } else {
+                    throw new AuthenticationException("TOKEN NULL");
                 }
+            }else {
+                throw new AuthenticationException("TOKEN NULL");
             }
         }
         filterChain.doFilter(request, response);
