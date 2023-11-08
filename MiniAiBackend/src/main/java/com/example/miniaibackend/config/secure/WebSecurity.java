@@ -18,6 +18,7 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -37,6 +38,7 @@ public class WebSecurity {
     private TokenFilter tokenFilter;
 
 
+
     /**
      * 核心代码，创建验证信息
      * @param http
@@ -54,17 +56,6 @@ public class WebSecurity {
         http.csrf((configurer) -> {
             configurer.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
         });// 关闭跨域
-        http.cors((config) -> {
-            CorsConfiguration configuration = new CorsConfiguration();
-            configuration.addAllowedOrigin("*");
-            configuration.setAllowCredentials(true);
-            configuration.addAllowedMethod("*");
-            configuration.addAllowedHeader("*");
-            configuration.addExposedHeader("*");
-            UrlBasedCorsConfigurationSource corsConfigurationSource = new UrlBasedCorsConfigurationSource();
-            corsConfigurationSource.registerCorsConfiguration("/**", configuration);
-            config.configurationSource((CorsConfigurationSource) corsConfigurationSource);
-        });// 关闭验证跨域
 
         http.addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class).exceptionHandling(
                 (exception) -> {
