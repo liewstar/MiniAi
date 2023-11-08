@@ -59,12 +59,25 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     public boolean addUser(User user) {
-        Integer res2 = userMapper.insert(user);
-        Integer userId = getUserId(user);
-        user.setId(userId);
-        Integer res = addRole(user);
-        log.info("register: username: {}, role: default user", user.getUsername());
-        return res != 0 && res2 != 0;
+
+        boolean reply = false;
+
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.eq("username", user.getUsername());
+        User user1 = userMapper.selectOne(userQueryWrapper);
+
+        if (user1 == null){
+            Integer res2 = userMapper.insert(user);
+            Integer userId = getUserId(user);
+            user.setId(userId);
+            Integer res = addRole(user);
+
+            if (res2 != 0 && res != 0){
+                reply = true;
+            }
+
+        }
+        return reply;
     }
 
     private int addRole(User user){

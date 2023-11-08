@@ -44,11 +44,19 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
             String username = loginData.get("username");
             String password = loginData.get("password");
 
-            if (username.isEmpty()){
+            if (username != null) {
+                if (username.isEmpty()) {
+                    throw new AuthenticationServiceException("用户名为空");
+                }
+            }else {
                 throw new AuthenticationServiceException("用户名为空");
             }
 
-            if (password.isEmpty()){
+            if (password != null) {
+                if (password.isEmpty()) {
+                    throw new AuthenticationServiceException("密码为空");
+                }
+            }else {
                 throw new AuthenticationServiceException("密码为空");
             }
 
