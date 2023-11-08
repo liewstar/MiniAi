@@ -4,6 +4,12 @@ spring:
     username: @datasource.username@
     password: @datasource.password@
     url: @datasource.url@
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      additional-paths: src/main/java
+
 
 server:
   port: 8081
