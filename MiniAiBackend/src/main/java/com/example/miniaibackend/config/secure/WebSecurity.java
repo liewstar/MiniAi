@@ -1,6 +1,7 @@
 package com.example.miniaibackend.config.secure;
 
 import com.example.miniaibackend.config.secure.adapter.AuthenticationManage;
+import com.example.miniaibackend.config.secure.cors.CustomCorsConfig;
 import com.example.miniaibackend.config.secure.filter.LoginFilter;
 import com.example.miniaibackend.config.secure.filter.TokenFilter;
 import com.example.miniaibackend.config.secure.handler.AuthenticationExceptionHandler;
@@ -38,6 +39,9 @@ public class WebSecurity {
     private TokenFilter tokenFilter;
 
 
+    @Autowired
+    private CustomCorsConfig customCorsConfig;
+
 
     /**
      * 核心代码，创建验证信息
@@ -54,16 +58,12 @@ public class WebSecurity {
         });
 
         http.csrf((configurer) -> {
-<<<<<<< HEAD
-//            configurer.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
-            configurer.disable();
-        });// 关闭跨域
-
-
-=======
             configurer.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
         });// 关闭跨域
->>>>>>> bcbee6d30cfd4ffbc1dbfb6a59a8c87a928f35c0
+
+        http.cors((config) -> {
+            config.configurationSource(customCorsConfig);
+        });
 
         http.addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class).exceptionHandling(
                 (exception) -> {
