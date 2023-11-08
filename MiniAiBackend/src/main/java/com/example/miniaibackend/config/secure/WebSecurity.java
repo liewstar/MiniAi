@@ -54,11 +54,16 @@ public class WebSecurity {
         });
 
         http.csrf((configurer) -> {
+<<<<<<< HEAD
 //            configurer.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
             configurer.disable();
         });// 关闭跨域
 
 
+=======
+            configurer.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
+        });// 关闭跨域
+>>>>>>> bcbee6d30cfd4ffbc1dbfb6a59a8c87a928f35c0
 
         http.addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class).exceptionHandling(
                 (exception) -> {
