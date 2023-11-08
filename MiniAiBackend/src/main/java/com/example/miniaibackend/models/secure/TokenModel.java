@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -14,4 +16,6 @@ import lombok.experimental.Accessors;
 public class TokenModel {
 
     private String token;
+
+    private List<String> roles;
 }

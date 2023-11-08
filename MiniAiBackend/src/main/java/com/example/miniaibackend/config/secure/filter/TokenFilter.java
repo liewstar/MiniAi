@@ -1,5 +1,6 @@
 package com.example.miniaibackend.config.secure.filter;
 
+import com.example.miniaibackend.config.secure.handler.AuthenticationExceptionHandler;
 import com.example.miniaibackend.service.secure.UserDetailsServiceImpl;
 import com.example.miniaibackend.utils.TokenUtils;
 import jakarta.servlet.FilterChain;
@@ -7,9 +8,14 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.AccountExpiredException;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -28,28 +34,38 @@ public class TokenFilter extends OncePerRequestFilter {
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
+    @Autowired
+    private AuthenticationExceptionHandler authenticationExceptionHandler;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         response.setContentType("application/json;charset=utf-8");
         url = request.getRequestURI();
         String token = request.getHeader("token");
-        Boolean isFilter = filterUri("/user/login", "/users/register");// 设置不需要被token拦截的URL
+        Boolean isFilter = filterUri("/users/login", "/users/register");// 设置不需要被token拦截的URL
         if (isFilter){
             if (token!=null) {
                 if (!token.equals("")) {
-                    String username = tokenUtils.getUserNameInToken(token);
-                    if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-                        if (tokenUtils.isTokenExpire(token)) {
-                            throw new AuthenticationException("TOKEN EXPIRED");
+                    if (tokenUtils.isTokenRight(token)) {
+                        String username = tokenUtils.getUserNameInToken(token);
+                        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                            if (tokenUtils.isTokenExpire(token)) {
+                                authenticationExceptionHandler.commence(request, response, new AccountExpiredException("TOKEN EXPIRED"));
+                                return;
+                            }
+                            holdAuthentication(userDetails, request);
                         }
-                        holdAuthentication(userDetails, request);
+                    }else {
+                        authenticationExceptionHandler.commence(request, response, new BadCredentialsException("TOKEN NOT RIGHT"));
                     }
                 } else {
-                    throw new AuthenticationException("TOKEN NULL");
+                    authenticationExceptionHandler.commence(request, response, new AuthenticationCredentialsNotFoundException("TOKEN IS NULL"));
+                    return;
                 }
             }else {
-                throw new AuthenticationException("TOKEN NULL");
+                authenticationExceptionHandler.commence(request, response, new AuthenticationCredentialsNotFoundException("TOKEN IS NULL"));
+                return;
             }
         }
         filterChain.doFilter(request, response);
@@ -76,10 +92,7 @@ public class TokenFilter extends OncePerRequestFilter {
             }
         }
         for (int i = 0; i < res.length; i++){
-            if (!res[i]){
-                reply = false;
-                break;
-            }
+            reply &= !res[i];
         }
         return reply;
     }
