@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/message")
-@CrossOrigin
+@CrossOrigin(origins = "*")
 /*
 * 用户新建消息
 * 用户查看自己的消息

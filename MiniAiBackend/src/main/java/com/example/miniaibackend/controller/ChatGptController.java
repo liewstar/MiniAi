@@ -13,7 +13,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @RestController
 @RequestMapping("/chat")
-@CrossOrigin
+@CrossOrigin(origins = "*")
 public class ChatGptController {
 
     @Resource

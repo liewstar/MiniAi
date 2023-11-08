@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/order")
-@CrossOrigin
+@CrossOrigin(origins = "*")
 /*
 * 用户新增订单
 * 管理员查看订单

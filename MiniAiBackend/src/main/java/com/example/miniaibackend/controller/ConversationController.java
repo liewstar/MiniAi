@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/conversation")
-@CrossOrigin
+@CrossOrigin(origins = "*")
 /*
 * 用户新建会话
 * 用户删除自己的会话

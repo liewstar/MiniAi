@@ -63,4 +63,19 @@ public class TokenUtils {
     }
 
 
+    /**
+     * 判断token是否正确
+     * @param token
+     * @return
+     */
+    public boolean isTokenRight(String token){
+        boolean reply = true;
+        try{
+            getClaims(token);
+        }catch (Exception e){
+            reply = false;
+        }
+        return reply;
+    }
+
 }

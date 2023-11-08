@@ -24,7 +24,7 @@ public class FailHandler implements AuthenticationFailureHandler {
         response.setContentType("application/json;charset=utf-8");
         ServletOutputStream servletOutputStream = response.getOutputStream();
         Result<Void> result = Result.err("登录失败");
-        String reply = JSON.toJSONString(request);
+        String reply = JSON.toJSONString(result);
 
         servletOutputStream.write(reply.getBytes(StandardCharsets.UTF_8));
         servletOutputStream.flush();
