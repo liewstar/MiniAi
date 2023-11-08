@@ -20,11 +20,11 @@
             <id>dev-retriblet</id>
             <properties>
                 <!--suppress UnresolvedMavenProperty -->
-                <datasource.url>${env.DATASOURCE_URL}</datasource.url>
+                <datasource.url>jdbc:mysql://${env.MYSQL_HOST}:${env.MYSQL_PORT}/miniai?serverTimezone=UTC&amp;useSSL=false&amp;allowPublicKeyRetrieval=true</datasource.url>
                 <!--suppress UnresolvedMavenProperty -->
-                <datasource.username>${env.DATASOURCE_USERNAME}</datasource.username>
+                <datasource.username>${env.MYSQL_USERNAME}</datasource.username>
                 <!--suppress UnresolvedMavenProperty -->
-                <datasource.password>${env.DATASOURCE_PASSWORD}</datasource.password>
+                <datasource.password>${env.MYSQL_PASSWORD}</datasource.password>
 
                 <!--suppress UnresolvedMavenProperty -->
                 <jwt.expire>${env.JWT_EXPIRE}</jwt.expire>
