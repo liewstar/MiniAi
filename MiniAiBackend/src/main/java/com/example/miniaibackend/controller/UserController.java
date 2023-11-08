@@ -8,8 +8,16 @@ import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -25,6 +33,7 @@ public class UserController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
 
     @PostMapping("/changePassword")
     public ResponseEntity<String> changePassword(String username, String oldPassword, String newPassword) {
@@ -50,5 +59,16 @@ public class UserController {
 //            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("args error");
             return Result.err(HttpStatus.BAD_REQUEST.value(), "注册失败");
         }
+    }
+
+    @GetMapping("/getRole")
+    public Result<?> getRole(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        List<String> roles = new ArrayList<>();
+        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+        for (GrantedAuthority grantedAuthority : authorities){
+            roles.add(grantedAuthority.getAuthority());
+        }
+        return Result.ok(roles);
     }
 }
