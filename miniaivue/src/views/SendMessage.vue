@@ -54,8 +54,15 @@ export default {
     getAllMessage(conversationId) {
       api.post("/message/getMessage?conversationId="+conversationId)
         .then((response) => {
-          console.log(response)
-          this.arrMessage = response
+          if(response.code === 200) {
+            this.arrMessage = response.data
+          }else {
+            this.$message({
+              message: '聊天记录获取失败',
+              type: "error"
+            })
+          }
+
         })
         .catch((error) => {
           console.log(error)

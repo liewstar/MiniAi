@@ -28,20 +28,31 @@
 
       <el-form-item label="模型">
         <el-select v-model="tableData.model" placeholder="请选择模型">
-          <el-option lable="ChatGpt3.5" value="ChatGpt3.5"></el-option>
+          <el-option value="gpt-3.5-turbo"></el-option>
+          <el-option value="gpt-3.5-turbo-0301"></el-option>
+          <el-option value="gpt-4"></el-option>
+          <el-option value="gpt-4-0314"></el-option>
+          <el-option value="gpt-4-32k"></el-option>
+          <el-option value="gpt-4-32k-0314"></el-option>
         </el-select>
       </el-form-item>
 
       <el-divider></el-divider>
 
       <el-form-item label="随机性">
-        <el-slider v-model="tableData.presencePenalty"></el-slider>
+        <el-slider :min="0" :max="1" :step="0.1" v-model="tableData.temperature"></el-slider>
+      </el-form-item>
+
+      <el-divider></el-divider>
+
+      <el-form-item label="降低重复度">
+        <el-slider :min="-2" :max="2" :step="0.1" v-model="tableData.frequencyPenalty"></el-slider>
       </el-form-item>
 
       <el-divider></el-divider>
 
       <el-form-item label="话题新鲜度">
-        <el-slider v-model="tableData.frequencyPenalty"></el-slider>
+        <el-slider :min="-2" :max="2" :step="0.1" v-model="tableData.presencePenalty"></el-slider>
       </el-form-item>
 
       <el-divider></el-divider>
@@ -53,7 +64,7 @@
       <el-divider></el-divider>
 
       <el-form-item label="附带历史消息数">
-        <el-slider v-model="tableData.takeMessages"></el-slider>
+        <el-slider :min="0" :max="32" :step="1" v-model="tableData.takeMessages"></el-slider>
       </el-form-item>
 
       <el-divider></el-divider>
@@ -74,13 +85,22 @@ export default {
       tableData: {
         endpoint:'',
         token:'',
-        model:'',
-        maxToken:'',
-        temperature:'',
-        presencePenalty:'',
-        frequencyPenalty:'',
-        takeMessages:'',
+        model:'gpt-3.5-turbo',
+        maxToken:2000,
+        temperature:0.5,
+        presencePenalty:0.0,
+        frequencyPenalty:0.0,
+        takeMessages:4,
       }
+    }
+  },
+  methods:{
+    saveSettings() {
+      localStorage.setItem("settings",JSON.stringify(this.tableData))
+      this.$message({
+        message: '保存成功',
+        type: 'success'
+      })
     }
   }
 }

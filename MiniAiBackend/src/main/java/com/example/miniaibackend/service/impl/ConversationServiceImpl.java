@@ -33,9 +33,20 @@ public class ConversationServiceImpl extends ServiceImpl<ConversationMapper, Con
     }
 
     @Override
-    public void addConversation(Integer userId, String title) {
+    public Conversation addConversation(Integer userId, String title) {
         Conversation conversation = new Conversation(null,userId,title,new DateTime());
         conversationMapper.insert(conversation);
+        return conversation;
+    }
+
+    @Override
+    public Conversation changeConversation(Integer conversationId, String title) {
+        QueryWrapper<Conversation> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("id", conversationId);
+        Conversation conversation = conversationMapper.selectOne(queryWrapper);
+        conversation.setTitle(title);
+        conversationMapper.update(conversation, queryWrapper);
+        return conversation;
     }
 
 

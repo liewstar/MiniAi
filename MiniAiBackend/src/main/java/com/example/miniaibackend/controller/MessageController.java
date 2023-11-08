@@ -1,6 +1,7 @@
 package com.example.miniaibackend.controller;
 
 import com.example.miniaibackend.domain.Message;
+import com.example.miniaibackend.models.Result;
 import com.example.miniaibackend.service.MessageService;
 import jakarta.annotation.Resource;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,8 @@ public class MessageController {
     MessageService messageService;
 
     @PostMapping("/getMessage")
-    public ResponseEntity<List<Message>> getMessage(Integer conversationId) {
-        return ResponseEntity.ok(messageService.getMessage(conversationId));
+    public Result<?> getMessage(Integer conversationId) {
+        //return ResponseEntity.ok(messageService.getMessage(conversationId));
+        return Result.ok(messageService.getMessage(conversationId)).setMessage("获取聊天记录成功");
     }
 }

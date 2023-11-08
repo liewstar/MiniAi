@@ -11,8 +11,25 @@
 
         <form name="email-form" method="get" class="relative w-full mt-4">
              <el-button @click="toPersonal" style=" background-color: black;"><i class="el-icon-s-tools"></i></el-button>
-             <el-button @click="newChat" class="right-20" style="background-color: black" ><i class="el-icon-circle-plus"></i> <span style="color: white">新的聊天</span></el-button>
+             <el-button @click="dialogVisible = true" class="right-20" style="background-color: black" ><i class="el-icon-circle-plus"></i> <span style="color: white">新的聊天</span></el-button>
         </form>
+
+        <el-dialog
+            :visible.sync="dialogVisible"
+            width="15%"
+
+            >
+
+<!--          <el-select v-model="selectPreset" class="p-4" lable="选择场景预设" >-->
+<!--            <el-option v-for="(preset, index) in presets" :key="index" :value="preset.name" :lable="preset.name"></el-option>-->
+<!--          </el-select>-->
+          <el-button>选择场景</el-button>
+          <el-button @click="newChat">直接开始</el-button>
+          <span slot="footer" class="dialog-footer">
+<!--    <el-button @click="dialogVisible = false">取 消</el-button>-->
+<!--    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>-->
+  </span>
+        </el-dialog>
 
       </div>
       <div style="height: 100%" class="col-span-10">
@@ -28,6 +45,7 @@
 <script>
 import Conversation from "@/components/Conversation";
 import api from "@/api";
+import axios from "axios";
 export default {
   name: "MainPage",
 
@@ -42,6 +60,9 @@ export default {
           createdTime:''
         }
       ],
+      dialogVisible: false,
+      presets:[],
+      selectPreset:'',
     }
   },
   methods:{
@@ -57,14 +78,51 @@ export default {
     toPersonal(){
       this.$router.push("/chat/me")
     },
-    newChat(){
+    readJson(){
+      //读取预设文件到localStroge
+      axios.get('/masks.json')
+          .then(response => {
+            // 解析后的 JSON 数据
+            const data = response.data;
+            // 在 Vue 组件中使用解析后的数据
+            this.presets = data;
+            console.log(this.presets)
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
       this.$router.push("/chat/sendMessage")
+    },
+    newChat() {
+      //新建会话
+      api.post("/conversation/addConversation",null,{
+        params: {
+          userId: 1,
+          title: '新的聊天'
+        }
+      }).then((response) => {
+        console.log(response.status+"status")
+        if(response.code === 200) {
+          console.log("add success")
+          this.dialogVisible = false;
+          this.clickConversation(response.data.id)
+        }
+      })
+      //进入新建的会话
     },
     getAllConversation() {
       const userId = 1;
-      api.post("/conversation/getConversation?userId=1",)
+      api.post("/conversation/getConversation?userId=1")
         .then((response) => {
-          this.allConversations = response
+          if(response.code === 200) {
+            this.allConversations = response.data
+          }else {
+            this.$message({
+              message: '网络错误，请刷新网页',
+              type: "error"
+            })
+          }
+
         })
         .catch((error) => {
           console.log(userId)
@@ -74,6 +132,7 @@ export default {
   },
   created() {
     this.getAllConversation();
+    this.readJson();
   }
 }
 </script>

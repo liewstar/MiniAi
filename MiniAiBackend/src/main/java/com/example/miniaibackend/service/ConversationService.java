@@ -13,5 +13,7 @@ import java.util.List;
 public interface ConversationService extends IService<Conversation> {
     List<Conversation> getConversation(Integer id);
 
-    void addConversation(Integer userId, String title);
+    Conversation addConversation(Integer userId, String title);
+
+    Conversation changeConversation(Integer conversationId, String title);
 }

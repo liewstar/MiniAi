@@ -42,7 +42,7 @@ public class ChatGptController {
                 .init();
 
         ChatCompletion chatCompletion = ChatCompletion.builder()
-                //              .model(ChatCompletion.Model.GPT_3_5_TURBO.getName())
+       //                       .model(ChatCompletion.Model.GPT_3_5_TURBO.getName())
                 .model(acceptDTO.getModel())
                 .messages(acceptDTO.getMessageList())
                 .maxTokens(acceptDTO.getMaxToken())

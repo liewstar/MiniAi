@@ -1,6 +1,7 @@
 package com.example.miniaibackend.controller;
 
 import com.example.miniaibackend.domain.Conversation;
+import com.example.miniaibackend.models.Result;
 import com.example.miniaibackend.service.ConversationService;
 import jakarta.annotation.Resource;
 import org.springframework.http.ResponseEntity;
@@ -23,13 +24,18 @@ public class ConversationController {
     ConversationService conversationService;
 
     @PostMapping("/getConversation")
-    public ResponseEntity<List<Conversation>> getConversation(Integer userId) {
-        return ResponseEntity.ok(conversationService.getConversation(userId));
+    public Result<?> getConversation(Integer userId) {
+        return Result.ok(conversationService.getConversation(userId)).setMessage("获取会话成功");
     }
 
     @PostMapping("/addConversation")
-    public ResponseEntity<?> addConversation(Integer userId, String title) {
-        conversationService.addConversation(userId, title);
-        return ResponseEntity.ok().body("success");
+    public Result<?> addConversation(Integer userId, String title) {
+        Conversation conversation = conversationService.addConversation(userId, title);
+        return Result.ok(conversation).setMessage("添加会话成功");
+    }
+
+    @PostMapping("/changeConversation")
+    public Result<?> changeConversation(Integer conversationId, String title) {
+        return Result.ok(conversationService.changeConversation(conversationId, title));
     }
 }
