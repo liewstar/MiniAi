@@ -12,6 +12,7 @@ import Users from "@/views/admin/Users";
 import UserLayout from "@/views/UserLayout";
 import AdminLayout from "@/views/admin/AdminLayout";
 import MainPage from "@/views/MainPage";
+import Loading from "@/views/Loading";
 
 
 Vue.use(VueRouter)
@@ -22,6 +23,11 @@ const routes = [
         name: 'Home',
         component: UserLayout,
         children: [
+            {
+              path:'',
+              name: Loading,
+              component: Loading
+            },
             {
                 path: '/about',
                 name: 'About',
@@ -63,6 +69,8 @@ const routes = [
 
         ]
     },
+
+
 
 
 

@@ -12,6 +12,8 @@
     "axios": "^1.6.0",
     "core-js": "^3.8.3",
     "element-ui": "^2.15.14",
+    "highlight.js": "^11.9.0",
+    "markdown-it": "^13.0.2",
     "postcss": "^8.4.31",
     "tailwindcss": "^3.3.5",
     "vue": "^2.6.14",

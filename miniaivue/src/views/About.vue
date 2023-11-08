@@ -1,5 +1,6 @@
 <template>
   <div class="flex flex-col space-y-2">
+
   </div>
 </template>
 
@@ -7,6 +8,11 @@
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "About",
+  data() {
+    return{
+      content: '# 123'
+    }
+  }
 }
 </script>
 

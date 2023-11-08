@@ -5,9 +5,9 @@
         <nav class="font-inter  h-auto  lg:relative lg:top-0">
           <div class="flex flex-col px-6 py-6 lg:flex-row lg:items-center lg:justify-between lg:px-10 lg:py-4 xl:px-20">
             <a href="#">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-code">
-                <path d="M16 18l6-6-6-6M8 6l-6 6 6 6"></path>
-              </svg>
+<!--              <img class="relative left-5 lg:inset-0" width="75" height="24" viewBox="0 0 75 24" fill="none" xmlns="http://www.w3.org/2000/svg">-->
+<!--<!-              -->
+<!--              </img>-->
             </a>
             <div class="mt-14 flex flex-col space-y-8 lg:mt-0 lg:flex lg:flex-row lg:space-x-1 lg:space-y-0">
               <router-link to="/chat/sendMessage" class="font-inter rounded-lg hover:text-[#c9fd02] lg:px-6 lg:py-4">首页</router-link>

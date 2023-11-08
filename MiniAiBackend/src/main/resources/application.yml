@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: liaoxin0328
-    url: jdbc:mysql://localhost:3306/miniai?characterEncoding=utf8&useSSL=false
+    username: @datasource.username@
+    password: @datasource.password@
+    url: @datasource.url@
 
 server:
   port: 8081
@@ -12,9 +12,9 @@ mybatis:
 
 
 jwt:
-  expire: 604800
-  secret: 12345678
-  header: Authorized
+  expire: @jwt.expire@
+  secret: @jwt.secret@
+  header: @jwt.header@
 
 open:
   ai:
