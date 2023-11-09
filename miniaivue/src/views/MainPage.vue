@@ -35,8 +35,13 @@
             :visible.sync="presetDialogvisiable"
             width="20%"
             >
-
-            <el-button v-for="(preset, index) in presets" :key="index" :value="preset.name" @click="chooseOnePreset()">{{preset.name}}</el-button>
+          <el-row>
+            <el-col v-for="(preset, index) in presets" :key="index">
+              <el-button class="w-full text-center mt-4" :value="preset.name" @click="chooseOnePreset(index)">
+                {{preset.name}}
+              </el-button>
+            </el-col>
+          </el-row>
 
         </el-dialog>
 
@@ -76,8 +81,11 @@ export default {
     }
   },
   methods:{
-    chooseOnePreset() {
+    chooseOnePreset(index) {
       this.presetDialogvisiable = false;
+      //设置预设，新建预设的会话（新建一个表，关联对话表和预设index）
+      console.log(index)
+      console.log(this.presets[index].context)
     },
     choosePreset() {
       this.dialogVisible = false
@@ -124,10 +132,10 @@ export default {
           //刷新会话
           this.getAllConversation();
           this.dialogVisible = false;
+          //进入了新的会话
           this.clickConversation(response.data.id)
         }
       })
-      //进入新建的会话
     },
     getAllConversation() {
       const userId = localStorage.getItem("MiniAiUserId");

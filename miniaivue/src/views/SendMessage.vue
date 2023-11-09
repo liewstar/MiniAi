@@ -1,7 +1,7 @@
 <template>
 <div>
   <div class="ml-64 col-span-2 flex flex-col overflow-y-auto scrollbar scrollbar-content" style="width: 60%;height: 600px" ref="messageContainer">
-    <div v-for="message in arrMessage" :key="message.id"  >
+    <div v-for="message in arrMessage" :key="message.indexId"  >
       <message :is-user="message.userId" :content="message.content"/>
     </div>
 
@@ -20,6 +20,7 @@
 
 <script>
 import Message from "@/components/Message";
+import { fetchEventSource } from '@microsoft/fetch-event-source';
 import api from "@/api";
 export default {
   name: "SendMessage",
@@ -27,6 +28,7 @@ export default {
   watch: {
     '$route.query.conversationId': {
       handler(newQuery, oldQuery) {
+        this.conversationId = newQuery
         console.log("conversationId,from,to" + oldQuery + newQuery)
         this.getAllMessage(newQuery)
       },
@@ -37,12 +39,73 @@ export default {
     sendMsg(){
       //先查数据库，赋初值
       //user和bot消息顺序都根据id来
-      const message = {
-        id: this.arrMessage.length+1,
-        content: this.msg,
-      };
-      //发送消息体到数组
-      this.arrMessage.push(message);
+      this.messageBody.messageList[0].content = this.msg
+      //发送临时数据到聊天记录数组
+      let indexId=0;
+      if(this.arrMessage.length === 0) {
+        indexId = 0
+      }else {
+       indexId = this.arrMessage[this.arrMessage.length-1].indexId+1
+      }
+      console.log(indexId+"first IndexId")
+      const sendMessage = {
+        id:0,
+        indexId:indexId,
+        conversationId:0,
+        userId:0,
+        content:this.msg,
+        timestamp:''
+      }
+      this.arrMessage.push(sendMessage);
+
+
+      this.messageBody.conversationId = this.conversationId;
+      //发送消息，得到流式响应
+
+      let botIndex = indexId +1
+      const botMessage = {
+        id:0,
+        indexId:botIndex,
+        conversationId:0,
+        userId:null,
+        content:"",
+        timestamp:''
+      }
+      const that = this
+      this.arrMessage.push(botMessage)
+      let botContent = '';
+
+
+      //eslint-disable-next-line no-unused-vars
+      const eventSource = new fetchEventSource('http://localhost:8081/chat/sse', {
+        method: 'POST',
+        headers: {
+          'Content-Type':'application/json',
+          'token':localStorage.getItem('MiniAiToken')
+        },
+        openWhenHidden: true,
+        body: JSON.stringify(this.messageBody),
+
+        onopen(response) {
+          console.log('event open' +response)
+
+        },
+        onmessage(event) {
+          botContent += event.data;
+          that.arrMessage[botIndex].content = botContent
+
+          console.log('eventSource msg: ', event.data);
+        },
+        onerror(err) {
+          console.log('eventSource error: ' + err);
+        },
+        onclose() {
+          console.log('eventSource close');
+        }
+      });
+
+
+
       //清空输入框
       this.msg = ''
       // 更新消息列表后滚动到底部
@@ -51,11 +114,18 @@ export default {
         container.scrollTop = container.scrollHeight;
       });
     },
+    //获取聊天记录
     getAllMessage(conversationId) {
       api.post("/message/getMessage?conversationId="+conversationId)
         .then((response) => {
           if(response.code === 200) {
-            this.arrMessage = response.data
+            this.arrMessage = response.data.map((message, index) => {
+              return {
+                ...message,
+                indexId: index
+              }
+            })
+            console.log(this.arrMessage)
           }else {
             this.$message({
               message: '聊天记录获取失败',
@@ -70,20 +140,61 @@ export default {
     }
   },
   mounted() {
-    this.getAllMessage(this.$route.query.conversationId)
+    this.getAllMessage(this.$route.query.conversationId);
+    this.conversationId = this.$route.query.conversationId
+    console.log(this.$route.query.conversationId+"mounted conversationId")
+
   },
   created() {
-
+    const settingsData = localStorage.getItem("settings")
+    const settings = JSON.parse(settingsData)
+    if(settings) {
+        this.messageBody.token = settings.token;
+        this.messageBody.endpoint = settings.endpoint;
+        this.messageBody.model = settings.model;
+        this.messageBody.maxToken = settings.maxToken;
+        this.messageBody.temperature = settings.temperature;
+        this.messageBody.presencePenalty = settings.presencePenalty;
+        this.messageBody.frequencyPenalty = settings.frequencyPenalty;
+    }
   },
   data(){
     return{
       msg:'',
-      arrMessage: [
+      // arrMessage: [
+      //   {
+      //     id:0,
+      //     content:'',
+      //   }
+      // ],
+      //聊天记录
+      arrMessage:[
         {
           id:0,
+          conversationId:0,
+          userId:"",
           content:'',
+          timestamp:''
         }
       ],
+      messageBody: {
+        userId: localStorage.getItem("MiniAiUserId"),
+        conversationId: 0,
+        token: "sess-EUwZdNeIytbNdB8XpI8CzJH15kqdpfrciaKgnimI",
+        endpoint: "https://ab.nextweb.fun/api/proxy/",
+        model: "gpt-3.5-turbo",
+        maxToken: 2000,
+        temperature: 0.5,
+        presencePenalty: 0.0,
+        frequencyPenalty: 0.0,
+        messageList: [
+          {
+            role: "user",
+            content: "",
+          }
+        ]
+      }
+
     }
   }
 }

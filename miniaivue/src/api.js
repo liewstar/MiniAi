@@ -3,7 +3,6 @@ import axios from 'axios';
 // 创建一个axios实例
 const api = axios.create({
     baseURL: 'http://localhost:8081', // 设置接口的基础URL
-    timeout: 10000, // 设置请求超时时间
 });
 
 // 请求拦截器

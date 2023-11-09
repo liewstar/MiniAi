@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col space-y-2 p-4">
     <div class="flex items-start">
-      <div v-if="this.isUser == null" class="bg-blue-500 text-white rounded-lg p-2">
+      <div v-if="this.isUser !== null" class="bg-blue-500 text-white rounded-lg p-2">
         <p>😃: {{content}}</p>
       </div>
       <div v-else class="bg-gray-800 text-white rounded-lg p-2">
@@ -31,7 +31,7 @@ export default {
       required: true
     },
     isUser: {
-      type: String,
+      type: null,
       required: true
     },
   },

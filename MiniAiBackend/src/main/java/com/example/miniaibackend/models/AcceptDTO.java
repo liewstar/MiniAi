@@ -20,7 +20,6 @@ public class AcceptDTO {
 
     private String endpoint;
 
-    private String content;
 
     private String model;
 

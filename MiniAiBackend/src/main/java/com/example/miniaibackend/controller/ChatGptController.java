@@ -22,11 +22,11 @@ public class ChatGptController {
 
     @PostMapping("/sse")
     @CrossOrigin
-    public SseEmitter sendMsg(@RequestBody AcceptDTO acceptDTO) {
+        public SseEmitter sendMsg(@RequestBody AcceptDTO acceptDTO) {
         Integer userId = acceptDTO.getUserId();
         int size = acceptDTO.getMessageList().size();
         com.plexpt.chatgpt.entity.chat.Message message = acceptDTO.getMessageList().get(size - 1);
-        if(message.getRole().equals("user")) {
+        if (message.getRole().equals("user")) {
             String content = message.getContent();
             Integer conversationId = acceptDTO.getConversationId();
             DateTime userTime = new DateTime();
@@ -42,7 +42,7 @@ public class ChatGptController {
                 .init();
 
         ChatCompletion chatCompletion = ChatCompletion.builder()
-       //                       .model(ChatCompletion.Model.GPT_3_5_TURBO.getName())
+                //                       .model(ChatCompletion.Model.GPT_3_5_TURBO.getName())
                 .model(acceptDTO.getModel())
                 .messages(acceptDTO.getMessageList())
                 .maxTokens(acceptDTO.getMaxToken())
@@ -55,7 +55,7 @@ public class ChatGptController {
         listener.setOnComplate(msg -> {
             String content = com.plexpt.chatgpt.entity.chat.Message.ofAssistant(msg).getContent();
             DateTime dateTime = new DateTime();
-            Message botMessage = new Message(null, acceptDTO.getConversationId(),null,content,dateTime);
+            Message botMessage = new Message(null, acceptDTO.getConversationId(), null, content, dateTime);
             messageMapper.insert(botMessage);
             return;
         });
