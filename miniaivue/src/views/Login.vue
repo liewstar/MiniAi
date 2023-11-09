@@ -8,13 +8,13 @@
             <form name="wf-form-password" method="get">
               <div class="relative">
                 <img alt="" src="https://assets.website-files.com/6458c625291a94a195e6cf3a/6458c625291a9455fae6cf89_EnvelopeSimple.svg" class="absolute left-[5%] top-[26%] inline-block" />
-                <input v-model="username" type="email" class="mb-4 block h-9 w-full rounded-md border border-solid border-black px-3 py-6 pl-14 text-sm text-[#333333]" placeholder="输入账号:" required="" />
+                <input v-model="username" type="email" class="mb-4 block h-9 w-full rounded-md border border-solid border-black px-3 py-6 pl-14 text-sm text-[#333333]" placeholder="输入账号" required="" />
               </div>
               <div class="relative mb-4">
                 <img alt="" src="https://assets.website-files.com/6458c625291a94a195e6cf3a/6458c625291a946794e6cf8a_Lock-2.svg" class="absolute left-[5%] top-[26%] inline-block" />
-                <input v-model="password" type="password" class="mb-4 block h-9 w-full rounded-md border border-solid border-black px-3 py-6 pl-14 text-sm text-[#333333]" placeholder="Password (min 8 characters)" required="" />
+                <input v-model="password" type="password" class="mb-4 block h-9 w-full rounded-md border border-solid border-black px-3 py-6 pl-14 text-sm text-[#333333]" placeholder="输入密码" required="" />
               </div>
-              <input type="submit" @click="register" value="注册" class="mt-4 inline-block w-full cursor-pointer items-center rounded-md bg-black px-6 py-3 text-center font-semibold text-white" />
+              <input type="submit" @click="register" value="登录" class="mt-4 inline-block w-full cursor-pointer items-center rounded-md bg-black px-6 py-3 text-center font-semibold text-white" />
             </form>
           </div>
           <p class="text-sm text-[#636262]">没有账号? <router-link to="/register" class="font-bold text-[#0b0b1f]">去注册</router-link>
@@ -48,6 +48,7 @@ export default {
         }
       })
       .then(response => {
+        console.log(response)
         if (response.code === 200) {
           this.$message({
             message: '登陆成功',

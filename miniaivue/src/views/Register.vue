@@ -12,16 +12,16 @@
           </div>
           <!-- Form -->
           <div class="mx-auto mb-4 max-w-[400px] pb-4">
-            <form name="wf-form-password" method="get">
+            <form name="wf-form-password">
               <div class="relative">
                 <img alt="" src="https://assets.website-files.com/6458c625291a94a195e6cf3a/6458c625291a9455fae6cf89_EnvelopeSimple.svg" class="absolute left-[5%] top-[26%] inline-block" />
-                <input type="password" class="mb-4 block h-9 w-full rounded-md border border-solid border-black px-3 py-6 pl-14 text-sm text-[#333333]"/>
+                <input v-model="username" type="text" class="mb-4 block h-9 w-full rounded-md border border-solid border-black px-3 py-6 pl-14 text-sm text-[#333333]"/>
               </div>
               <div class="relative mb-4">
                 <img alt="" src="https://assets.website-files.com/6458c625291a94a195e6cf3a/6458c625291a946794e6cf8a_Lock-2.svg" class="absolute left-[5%] top-[26%] inline-block" />
-                <input type="password" class="mb-4 block h-9 w-full rounded-md border border-solid border-black px-3 py-6 pl-14 text-sm text-[#333333]"/>
+                <input v-model="password" type="password" class="mb-4 block h-9 w-full rounded-md border border-solid border-black px-3 py-6 pl-14 text-sm text-[#333333]"/>
               </div>
-              <input type="submit" value="注册" class="mt-4 inline-block w-full cursor-pointer items-center rounded-md bg-black px-6 py-3 text-center font-semibold text-white" />
+              <input @click="register" value="注册" class="mt-4 inline-block w-full cursor-pointer items-center rounded-md bg-black px-6 py-3 text-center font-semibold text-white" />
             </form>
           </div>
           <p class="text-sm text-[#636262]">已经有账号? <router-link to="/login" class="font-bold text-[#0b0b1f]">去登录</router-link>
@@ -33,9 +33,43 @@
 </template>
 
 <script>
+import api from "@/api"
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
-  name: "Register.vue"
+  name: "Register.vue",
+  data(){
+    return{
+      username:'',
+      password:''
+    }
+  },
+  methods:{
+    register() {
+      const registerData = {
+        username:this.username,
+        password:this.password
+      }
+      api.post("/users/register",registerData,{
+        headers:{
+          'Content-Type':'application/json'
+        }
+      })
+      .then(response => {
+        if(response.code === 200) {
+          this.$message({
+            message:'注册成功',
+            type:"success"
+          })
+          this.$router.push("/login")
+        }else {
+          this.$message({
+            message: '注册失败，账号已存在',
+            type: "error"
+          })
+        }
+      })
+    }
+  }
 }
 </script>
 
