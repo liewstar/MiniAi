@@ -51,7 +51,7 @@ public class SuccessHandler implements AuthenticationSuccessHandler {
         for (GrantedAuthority grantedAuthority : authorities){
             roles.add(grantedAuthority.getAuthority());
         }
-        Result<TokenModel> result = Result.ok(new TokenModel(token, roles));
+        Result<TokenModel> result = Result.ok(new TokenModel(user.getId(), token, roles));
         String reply = JSON.toJSONString(result);
         servletOutputStream.write(reply.getBytes(StandardCharsets.UTF_8));
         servletOutputStream.flush();

@@ -15,6 +15,8 @@ import java.util.List;
 @Accessors(chain = true)
 public class TokenModel {
 
+    private Integer userId;
+
     private String token;
 
     private List<String> roles;
