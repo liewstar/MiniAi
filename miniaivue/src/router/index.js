@@ -98,8 +98,24 @@ const routes = [
     }
 ];
 
+
+
+
 const router = new VueRouter({
     mode: 'history',
     routes
 })
+
+//路由导航守卫
+router.beforeEach((to, from, next) => {
+    const token = localStorage.getItem('MiniAiToken');
+
+    // 如果存在Token，允许访问页面
+    if (token || to.path === '/login' || to.path === '/register' || to.path === '/price' || to.path === '/about' || to.path === '/') {
+        next();
+    } else {
+        // 如果不存在Token，重定向到登录页面或其他需要登录的页面
+        next('/login');
+    }
+});
 export default router

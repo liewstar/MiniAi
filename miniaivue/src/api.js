@@ -9,7 +9,8 @@ const api = axios.create({
 // 请求拦截器
 api.interceptors.request.use(
     (config) => {
-        // 在发送请求之前做些什么，例如添加token等
+        // 在发送请求添加token
+        config.headers['token'] = localStorage.getItem("MiniAiToken");
         return config;
     },
     (error) => {

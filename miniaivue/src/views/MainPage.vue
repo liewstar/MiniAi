@@ -23,12 +23,21 @@
 <!--          <el-select v-model="selectPreset" class="p-4" lable="选择场景预设" >-->
 <!--            <el-option v-for="(preset, index) in presets" :key="index" :value="preset.name" :lable="preset.name"></el-option>-->
 <!--          </el-select>-->
-          <el-button>选择场景</el-button>
+          <el-button @click="choosePreset">选择场景</el-button>
           <el-button @click="newChat">直接开始</el-button>
           <span slot="footer" class="dialog-footer">
 <!--    <el-button @click="dialogVisible = false">取 消</el-button>-->
 <!--    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>-->
-  </span>
+          </span>
+        </el-dialog>
+
+        <el-dialog
+            :visible.sync="presetDialogvisiable"
+            width="20%"
+            >
+
+            <el-button v-for="(preset, index) in presets" :key="index" :value="preset.name" @click="chooseOnePreset()">{{preset.name}}</el-button>
+
         </el-dialog>
 
       </div>
@@ -63,9 +72,17 @@ export default {
       dialogVisible: false,
       presets:[],
       selectPreset:'',
+      presetDialogvisiable: false
     }
   },
   methods:{
+    chooseOnePreset() {
+      this.presetDialogvisiable = false;
+    },
+    choosePreset() {
+      this.dialogVisible = false
+      this.presetDialogvisiable = true;
+    },
     clickConversation(id){
       console.log(id)
       this.$router.push({
@@ -94,16 +111,18 @@ export default {
       this.$router.push("/chat/sendMessage")
     },
     newChat() {
+      const userId = localStorage.getItem("MiniAiUserId")
       //新建会话
       api.post("/conversation/addConversation",null,{
         params: {
-          userId: 1,
+          userId: userId,
           title: '新的聊天'
         }
       }).then((response) => {
         console.log(response.status+"status")
         if(response.code === 200) {
-          console.log("add success")
+          //刷新会话
+          this.getAllConversation();
           this.dialogVisible = false;
           this.clickConversation(response.data.id)
         }
@@ -111,8 +130,8 @@ export default {
       //进入新建的会话
     },
     getAllConversation() {
-      const userId = 1;
-      api.post("/conversation/getConversation?userId=1")
+      const userId = localStorage.getItem("MiniAiUserId");
+      api.post("/conversation/getConversation?userId="+userId)
         .then((response) => {
           if(response.code === 200) {
             this.allConversations = response.data
