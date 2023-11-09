@@ -10,7 +10,7 @@
   <div class="w-full absolute left-1/2 transform -translate-x-1/2 bottom-3">
     <div class="mx-auto mb-4 flex w-3/4 justify-center">
       <div class="relative w-full max-w-[75%]">
-        <input v-model="msg" @keyup.enter="sendMsg" class="rounded-lg h-9 w-full border border-solid border-black bg-white px-3 py-6 text-sm text-[#333333]" placeholder="向MiniAi提问" />
+        <input v-model="msg" class="rounded-lg h-9 w-full border border-solid border-black bg-white px-3 py-6 text-sm text-[#333333]" placeholder="向MiniAi提问" />
         <input type="submit" @click="sendMsg" value="发送" class="rounded-lg relative right-0 top-[5px] w-full cursor-pointer bg-black px-6 py-2 text-center font-semibold text-white sm:absolute sm:right-[5px] sm:w-auto" />
       </div>
     </div>
@@ -28,8 +28,8 @@ export default {
   watch: {
     '$route.query.conversationId': {
       handler(newQuery, oldQuery) {
+        console.log(oldQuery)
         this.conversationId = newQuery
-        console.log("conversationId,from,to" + oldQuery + newQuery)
         this.getAllMessage(newQuery)
       },
       deep: true
@@ -37,6 +37,18 @@ export default {
   },
   methods:{
     sendMsg(){
+      if(this.addTitle === 0) {
+        //修改标题
+        const title = this.msg.substr(0,8)
+          api.post("/conversation/changeConversation?conversationId="+this.conversationId+"&title="+title)
+        .then(response => {
+          if(response.code === 200) {
+            console.log("change title success")
+          }else {
+            this.$message.error("出错了，请刷新重试")
+          }
+        })
+      }
       //先查数据库，赋初值
       //user和bot消息顺序都根据id来
       this.messageBody.messageList[0].content = this.msg
@@ -47,7 +59,6 @@ export default {
       }else {
        indexId = this.arrMessage[this.arrMessage.length-1].indexId+1
       }
-      console.log(indexId+"first IndexId")
       const sendMessage = {
         id:0,
         indexId:indexId,
@@ -57,11 +68,15 @@ export default {
         timestamp:''
       }
       this.arrMessage.push(sendMessage);
+      console.log("send message")
+      //清空输入框
+      this.msg = ''
+
 
 
       this.messageBody.conversationId = this.conversationId;
       //发送消息，得到流式响应
-
+      localStorage.setItem(new Date(),new Date())
       let botIndex = indexId +1
       const botMessage = {
         id:0,
@@ -74,6 +89,7 @@ export default {
       const that = this
       this.arrMessage.push(botMessage)
       let botContent = '';
+      that.ctrlAbout = new AbortController();
 
 
       //eslint-disable-next-line no-unused-vars
@@ -83,6 +99,7 @@ export default {
           'Content-Type':'application/json',
           'token':localStorage.getItem('MiniAiToken')
         },
+        signal: that.ctrlAbout.signal,
         openWhenHidden: true,
         body: JSON.stringify(this.messageBody),
 
@@ -91,8 +108,15 @@ export default {
 
         },
         onmessage(event) {
-          botContent += event.data;
-          that.arrMessage[botIndex].content = botContent
+          if(event.data === '已完成') {
+            that.ctrlAbout.abort()
+          }else {
+            botContent += event.data;
+            that.arrMessage[botIndex].content = botContent
+          }
+
+
+
 
           console.log('eventSource msg: ', event.data);
         },
@@ -104,10 +128,10 @@ export default {
         }
       });
 
+      console.log("data over")
 
 
-      //清空输入框
-      this.msg = ''
+
       // 更新消息列表后滚动到底部
       this.$nextTick(() => {
         const container = this.$refs.messageContainer;
@@ -125,7 +149,6 @@ export default {
                 indexId: index
               }
             })
-            console.log(this.arrMessage)
           }else {
             this.$message({
               message: '聊天记录获取失败',
@@ -142,7 +165,11 @@ export default {
   mounted() {
     this.getAllMessage(this.$route.query.conversationId);
     this.conversationId = this.$route.query.conversationId
-    console.log(this.$route.query.conversationId+"mounted conversationId")
+    //判断是否加标题
+    if(this.arrMessage.length === 0) {
+        this.addTitle = 1
+    }
+    console.log(this.arrMessage+"====arrMessage")
 
   },
   created() {
@@ -160,13 +187,8 @@ export default {
   },
   data(){
     return{
+      addTitle:0,
       msg:'',
-      // arrMessage: [
-      //   {
-      //     id:0,
-      //     content:'',
-      //   }
-      // ],
       //聊天记录
       arrMessage:[
         {
@@ -180,7 +202,7 @@ export default {
       messageBody: {
         userId: localStorage.getItem("MiniAiUserId"),
         conversationId: 0,
-        token: "sess-EUwZdNeIytbNdB8XpI8CzJH15kqdpfrciaKgnimI",
+        token: "",
         endpoint: "https://ab.nextweb.fun/api/proxy/",
         model: "gpt-3.5-turbo",
         maxToken: 2000,

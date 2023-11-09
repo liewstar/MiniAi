@@ -21,7 +21,7 @@
       <el-divider></el-divider>
 
       <el-form-item label="API Key">
-        <el-input v-model="tableData.token"></el-input>
+        <el-input type="password" v-model="tableData.token"></el-input>
       </el-form-item>
 
       <el-divider></el-divider>
@@ -101,6 +101,13 @@ export default {
         message: '保存成功',
         type: 'success'
       })
+    }
+  },
+  mounted() {
+    const settingsData = localStorage.getItem("settings")
+    const settings = JSON.parse(settingsData)
+    if(settings) {
+      this.tableData = settings
     }
   }
 }

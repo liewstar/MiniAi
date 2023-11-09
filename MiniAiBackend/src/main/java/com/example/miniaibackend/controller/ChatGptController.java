@@ -11,6 +11,8 @@ import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/chat")
 @CrossOrigin(origins = "*")
@@ -53,6 +55,11 @@ public class ChatGptController {
         SseEmitter sseEmitter = new SseEmitter(-1L);
         SseStreamListener listener = new SseStreamListener(sseEmitter);
         listener.setOnComplate(msg -> {
+            try {
+                sseEmitter.send("已完成");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             String content = com.plexpt.chatgpt.entity.chat.Message.ofAssistant(msg).getContent();
             DateTime dateTime = new DateTime();
             Message botMessage = new Message(null, acceptDTO.getConversationId(), null, content, dateTime);
