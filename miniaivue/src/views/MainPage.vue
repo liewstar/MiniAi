@@ -83,17 +83,15 @@ export default {
   mounted() {
     setTimeout(() => {
       // 在此处访问已经赋值的数组
-      console.log(this.allConversations)
       this.getMaxConversationId()
       // 执行其他逻辑
-    }, 500);
+    }, 1000);
   },
   methods:{
     getMaxConversationId() {
       let maxId = 0;
       for (let i = 0; i < this.allConversations.length; i++) {
           const conversation = this.allConversations[i];
-          console.log(conversation.id)
           if(conversation.id > maxId) {
             maxId = conversation.id
           }
@@ -103,15 +101,14 @@ export default {
     chooseOnePreset(index) {
       this.presetDialogvisiable = false;
       //设置预设，新建预设的会话（新建一个表，关联对话表和预设index）
-      console.log(index)
-      console.log(this.presets[index].context)
+      localStorage.setItem("preset",JSON.stringify(this.presets[index].context))
+      this.newChat()
     },
     choosePreset() {
       this.dialogVisible = false
       this.presetDialogvisiable = true;
     },
     clickConversation(id){
-      console.log(id)
       this.$router.push({
         path: "/chat/sendMessage",
         query:{
@@ -130,7 +127,6 @@ export default {
             const data = response.data;
             // 在 Vue 组件中使用解析后的数据
             this.presets = data;
-            console.log(this.presets)
           })
           .catch(error => {
             console.error('Error:', error);
@@ -146,7 +142,6 @@ export default {
           title: '新的聊天'
         }
       }).then((response) => {
-        console.log(response.status+"status")
         if(response.code === 200) {
           //刷新会话
           this.getAllConversation();
@@ -179,7 +174,6 @@ export default {
   created() {
     this.getAllConversation();
     this.readJson();
-    console.log(this.allConversations)
   }
 }
 </script>

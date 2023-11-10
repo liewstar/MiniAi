@@ -46,7 +46,6 @@ export default {
         }
       })
       .then(response => {
-        console.log(response)
         if (response.code === 200) {
           localStorage.setItem("MiniAiUserId",response.data.userId)
           localStorage.setItem("MiniAiToken",response.data.token)

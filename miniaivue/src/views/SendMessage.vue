@@ -30,6 +30,7 @@ export default {
         console.log(oldQuery)
         this.conversationId = newQuery
         this.getAllMessage(newQuery)
+        this.changeSet()
       },
       deep: true
     }
@@ -41,16 +42,21 @@ export default {
         const title = this.msg.substr(0,8)
           api.post("/conversation/changeConversation?conversationId="+this.conversationId+"&title="+title)
         .then(response => {
-          if(response.code === 200) {
-            console.log("change title success")
-          }else {
+          if(response.code !== 200) {
             this.$message.error("出错了，请刷新重试")
           }
         })
       }
       //先查数据库，赋初值
       //user和bot消息顺序都根据id来
-      this.messageBody.messageList[0].content = this.msg
+      //消息发送的user位置
+      let sendBody = {
+        id:'',
+        role:'user',
+        content:this.msg,
+        date:''
+      }
+      this.messageBody.messageList.push(sendBody)
       //发送临时数据到聊天记录数组
       let indexId=0;
       if(this.arrMessage.length === 0) {
@@ -67,7 +73,6 @@ export default {
         timestamp:''
       }
       this.arrMessage.push(sendMessage);
-      console.log("send message")
       //清空输入框
       this.msg = ''
 
@@ -82,7 +87,7 @@ export default {
         indexId:botIndex,
         conversationId:0,
         userId:null,
-        content:"",
+        content:"正在生成...",
         timestamp:''
       }
       const that = this
@@ -104,7 +109,6 @@ export default {
 
         onopen(response) {
           console.log('event open' +response)
-
         },
         onmessage(event) {
             let resData = JSON.parse(event.data)
@@ -112,21 +116,37 @@ export default {
             that.arrMessage[botIndex].content = botContent
             console.log(botContent)
           console.log('eventSource msg: ', event.data);
+          that.$nextTick(() => {
+            const container = that.$refs.messageContainer;
+            container.scrollTop = container.scrollHeight;
+          });
         },
         onerror(err) {
           that.ctrlAbout.abort()
           that.arrMessage.splice(botIndex,1)
           that.$message.error("出现错误，非会员请检查token和接口后重试")
           console.log('eventSource error: ' + err);
+          eventSource.close()
         },
         onclose() {
           that.ctrlAbout.abort()
+
+          let botBody = {
+            id:'',
+            role:'assistant',
+            content:botContent,
+            date:''
+          }
+          that.messageBody.messageList.push(botBody)
+          if(botContent.length < 2) {
+            that.$message.error("出现错误，非会员请检查token和接口后重试")
+          }
           console.log('eventSource close');
         }
       });
 
       eventSource.catch(error => {
-        console.log(error)
+        console.log(""+error)
       })
 
 
@@ -158,6 +178,30 @@ export default {
         .catch((error) => {
           console.log(error)
         })
+    },
+    changeSet() {
+      const settingsData = localStorage.getItem("settings")
+      const settings = JSON.parse(settingsData)
+      if(settings) {
+        this.messageBody.token = settings.token;
+        this.messageBody.endpoint = settings.endpoint;
+        this.messageBody.model = settings.model;
+        this.messageBody.maxToken = settings.maxToken;
+        this.messageBody.temperature = settings.temperature;
+        this.messageBody.presencePenalty = settings.presencePenalty;
+        this.messageBody.frequencyPenalty = settings.frequencyPenalty;
+      }
+
+      const presetData = localStorage.getItem("preset")
+      const preset = JSON.parse(presetData)
+      let copyPreset = preset
+      if(copyPreset) {
+        this.messageBody.messageList = copyPreset
+        console.log("messageBody")
+        console.log(this.messageBody)
+        //删除预设记录
+        localStorage.removeItem("preset")
+      }
     }
   },
   mounted() {
@@ -171,17 +215,7 @@ export default {
 
   },
   created() {
-    const settingsData = localStorage.getItem("settings")
-    const settings = JSON.parse(settingsData)
-    if(settings) {
-        this.messageBody.token = settings.token;
-        this.messageBody.endpoint = settings.endpoint;
-        this.messageBody.model = settings.model;
-        this.messageBody.maxToken = settings.maxToken;
-        this.messageBody.temperature = settings.temperature;
-        this.messageBody.presencePenalty = settings.presencePenalty;
-        this.messageBody.frequencyPenalty = settings.frequencyPenalty;
-    }
+    this.changeSet()
   },
   data(){
     return{
@@ -207,12 +241,7 @@ export default {
         temperature: 0.5,
         presencePenalty: 0.0,
         frequencyPenalty: 0.0,
-        messageList: [
-          {
-            role: "user",
-            content: "",
-          }
-        ]
+        messageList: []
       }
 
     }

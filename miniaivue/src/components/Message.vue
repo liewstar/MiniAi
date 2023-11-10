@@ -35,10 +35,8 @@ export default {
   methods: {
     renderedMessage() {
       if(this.content) {
-        console.log("=======")
         return this.md.render(this.content);
       }
-      console.log("======")
       return '';
     }
   },

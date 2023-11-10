@@ -78,10 +78,13 @@ public class ChatEventListener extends EventSourceListener {
         }
         ResponseBody body = response.body();
         if (Objects.nonNull(body)) {
-            log.error("OpenAI  sse连接异常data：{}，异常：{}", body.string(), t);
+            sseEmitter.send("网络错误");
+            log.error("OpenAI  sse连接body异常data：{}，异常：{}", body.string(), t);
         } else {
+            sseEmitter.send("网络错误");
             log.error("OpenAI  sse连接异常data：{}，异常：{}", response, t);
         }
+
         eventSource.cancel();
         SseHelper.complete(sseEmitter);
     }
