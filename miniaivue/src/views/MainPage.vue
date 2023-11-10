@@ -68,7 +68,7 @@ export default {
     return {
       allConversations:[
         {
-          id:'',
+          id:0,
           title:'',
           userId:'',
           createdTime:''
@@ -80,7 +80,26 @@ export default {
       presetDialogvisiable: false
     }
   },
+  mounted() {
+    setTimeout(() => {
+      // 在此处访问已经赋值的数组
+      console.log(this.allConversations)
+      this.getMaxConversationId()
+      // 执行其他逻辑
+    }, 500);
+  },
   methods:{
+    getMaxConversationId() {
+      let maxId = 0;
+      for (let i = 0; i < this.allConversations.length; i++) {
+          const conversation = this.allConversations[i];
+          console.log(conversation.id)
+          if(conversation.id > maxId) {
+            maxId = conversation.id
+          }
+      }
+      this.clickConversation(maxId)
+    },
     chooseOnePreset(index) {
       this.presetDialogvisiable = false;
       //设置预设，新建预设的会话（新建一个表，关联对话表和预设index）
@@ -160,6 +179,7 @@ export default {
   created() {
     this.getAllConversation();
     this.readJson();
+    console.log(this.allConversations)
   }
 }
 </script>

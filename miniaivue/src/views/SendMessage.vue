@@ -1,10 +1,9 @@
 <template>
 <div>
   <div class="ml-64 col-span-2 flex flex-col overflow-y-auto scrollbar scrollbar-content" style="width: 60%;height: 600px" ref="messageContainer">
-    <div v-for="message in arrMessage" :key="message.indexId"  >
+    <div v-for="message in arrMessage" :key="message.indexId" class="w-full" >
       <message :is-user="message.userId" :content="message.content"/>
     </div>
-
   </div>
 
   <div class="w-full absolute left-1/2 transform -translate-x-1/2 bottom-3">
@@ -108,28 +107,27 @@ export default {
 
         },
         onmessage(event) {
-          if(event.data === '已完成') {
-            that.ctrlAbout.abort()
-          }else {
-            botContent += event.data;
+            let resData = JSON.parse(event.data)
+            botContent += resData.content
             that.arrMessage[botIndex].content = botContent
-          }
-
-
-
-
+            console.log(botContent)
           console.log('eventSource msg: ', event.data);
         },
         onerror(err) {
+          that.ctrlAbout.abort()
+          that.arrMessage.splice(botIndex,1)
+          that.$message.error("出现错误，非会员请检查token和接口后重试")
           console.log('eventSource error: ' + err);
         },
         onclose() {
+          that.ctrlAbout.abort()
           console.log('eventSource close');
         }
       });
 
-      console.log("data over")
-
+      eventSource.catch(error => {
+        console.log(error)
+      })
 
 
       // 更新消息列表后滚动到底部

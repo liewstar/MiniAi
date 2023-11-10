@@ -2,6 +2,7 @@ package com.example.miniaibackend.controller;
 
 import cn.hutool.core.date.DateTime;
 import com.example.miniaibackend.domain.Message;
+import com.example.miniaibackend.listener.ChatEventListener;
 import com.example.miniaibackend.mapper.MessageMapper;
 import com.example.miniaibackend.models.AcceptDTO;
 import com.plexpt.chatgpt.ChatGPTStream;
@@ -12,6 +13,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
+import okhttp3.sse.EventSource;
+import okhttp3.sse.EventSourceListener;
 
 @RestController
 @RequestMapping("/chat")
@@ -35,38 +40,38 @@ public class ChatGptController {
             Message userMessage = new Message(null, conversationId, userId, content, userTime);
             messageMapper.insert(userMessage);
         }
-
-        ChatGPTStream chatGPTStream = ChatGPTStream.builder()
-                .apiKey(acceptDTO.getToken())
-                .apiHost(acceptDTO.getEndpoint())
-                .timeout(5000)
-                .build()
-                .init();
-
-        ChatCompletion chatCompletion = ChatCompletion.builder()
-                //                       .model(ChatCompletion.Model.GPT_3_5_TURBO.getName())
-                .model(acceptDTO.getModel())
-                .messages(acceptDTO.getMessageList())
-                .maxTokens(acceptDTO.getMaxToken())
-                .temperature(acceptDTO.getTemperature())
-                .presencePenalty(acceptDTO.getPresencePenalty())
-                .frequencyPenalty(acceptDTO.getFrequencyPenalty())
-                .build();
         SseEmitter sseEmitter = new SseEmitter(-1L);
-        SseStreamListener listener = new SseStreamListener(sseEmitter);
-        listener.setOnComplate(msg -> {
-            try {
-                sseEmitter.send("已完成");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            String content = com.plexpt.chatgpt.entity.chat.Message.ofAssistant(msg).getContent();
-            DateTime dateTime = new DateTime();
-            Message botMessage = new Message(null, acceptDTO.getConversationId(), null, content, dateTime);
-            messageMapper.insert(botMessage);
-            return;
-        });
-        chatGPTStream.streamChatCompletion(chatCompletion, listener);
+        try{
+            ChatGPTStream chatGPTStream = ChatGPTStream.builder()
+                    .apiKey(acceptDTO.getToken())
+                    .apiHost(acceptDTO.getEndpoint())
+                    .timeout(5000)
+                    .build()
+                    .init(); ChatCompletion chatCompletion = ChatCompletion.builder()
+                    //                       .model(ChatCompletion.Model.GPT_3_5_TURBO.getName())
+                    .model(acceptDTO.getModel())
+                    .messages(acceptDTO.getMessageList())
+                    .maxTokens(acceptDTO.getMaxToken())
+                    .temperature(acceptDTO.getTemperature())
+                    .presencePenalty(acceptDTO.getPresencePenalty())
+                    .frequencyPenalty(acceptDTO.getFrequencyPenalty())
+                    .build();
+
+            ChatEventListener listener = new ChatEventListener(sseEmitter);
+            listener.setOnComplate(msg -> {
+                String content = com.plexpt.chatgpt.entity.chat.Message.ofAssistant(msg).getContent();
+                DateTime dateTime = new DateTime();
+                Message botMessage = new Message(null, acceptDTO.getConversationId(), null, content, dateTime);
+                messageMapper.insert(botMessage);
+                return;
+            });
+            chatGPTStream.streamChatCompletion(chatCompletion, listener);
+        }catch (Exception e) {
+            System.out.println(e.getMessage()+"===");
+        }
+
+
+
         return sseEmitter;
     }
 

@@ -1,15 +1,12 @@
 <template>
-  <div class="flex flex-col space-y-2 p-4">
+  <div class="p-4">
     <div class="flex items-start">
       <div v-if="this.isUser !== null" class="bg-blue-500 text-white rounded-lg p-2">
-        <p>😃: {{content}}</p>
+        <pre style="white-space: pre-wrap;">😃: {{content}}</pre>
       </div>
       <div v-else class="bg-gray-800 text-white rounded-lg p-2">
-        <p>🤖: {{content}}</p>
+        <pre style="white-space: pre-wrap;">🤖: {{content}}</pre>
       </div>
-
-
-
 <!--      <div v-if="this.isUser == null" class="bg-blue-500 text-white rounded-lg p-2">-->
 <!--        <p v-html="renderedMessage"></p>-->
 <!--      </div>-->
