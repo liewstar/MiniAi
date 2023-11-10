@@ -2,23 +2,19 @@
   <div class="p-4">
     <div class="flex items-start">
       <div v-if="this.isUser !== null" class="bg-blue-500 text-white rounded-lg p-2">
-        <pre style="white-space: pre-wrap;">😃: {{content}}</pre>
+        <pre style="white-space: pre-wrap;" v-html="'😀'+renderedMarkdown"></pre>
       </div>
-      <div v-else class="bg-gray-800 text-white rounded-lg p-2">
-        <pre style="white-space: pre-wrap;">🤖: {{content}}</pre>
+      <div v-else class="bg-gray-500 text-white rounded-lg p-2">
+        <pre style="white-space: pre-wrap;" v-html="'🤖'+renderedMarkdown"></pre>
       </div>
-<!--      <div v-if="this.isUser == null" class="bg-blue-500 text-white rounded-lg p-2">-->
-<!--        <p v-html="renderedMessage"></p>-->
-<!--      </div>-->
-<!--      <div v-else class="bg-gray-800 text-white rounded-lg p-2">-->
-<!--        <p v-html="renderedMessage"></p>-->
-<!--      </div>-->
     </div>
   </div>
 </template>
 <script>
 import MarkdownIt from 'markdown-it';
-import hljs from 'highlight.js';
+import hljs from 'highlight.js'
+import markdownItHighlight from 'markdown-it-highlightjs'
+import 'highlight.js/styles/github.css'
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Message",
@@ -32,29 +28,18 @@ export default {
       required: true
     },
   },
-  methods: {
-    renderedMessage() {
-      if(this.content) {
-        return this.md.render(this.content);
-      }
-      return '';
-    }
-  },
-  mounted() {
-    const  md = new MarkdownIt({
-      highlight: function (str, lang) {
-        if (lang && hljs.getLanguage(lang)) {
-          try {
-            return hljs.highlight(lang, str).value;
-          }catch (__) {console.log('111')}
+  computed: {
+    renderedMarkdown() {
+      const md = new MarkdownIt().use(markdownItHighlight)
+
+      md.set({
+        highlight: function(code, lang) {
+          return hljs.highlightAuto(code, [lang]).value
         }
-        return '';
-      }
-    });
-    this.md = md;
-  },
-  computed() {
-    this.renderedMessage();
+      })
+
+      return md.render(this.content)
+    }
   }
 
 }

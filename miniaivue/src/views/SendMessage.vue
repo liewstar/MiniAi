@@ -27,7 +27,7 @@ export default {
   watch: {
     '$route.query.conversationId': {
       handler(newQuery, oldQuery) {
-        console.log(oldQuery)
+        console.log("oldQuery:"+oldQuery+" newQuery:"+newQuery)
         this.conversationId = newQuery
         this.getAllMessage(newQuery)
         this.changeSet()
@@ -167,6 +167,7 @@ export default {
                 indexId: index
               }
             })
+            console.log(this.arrMessage)
           }else {
             this.$message({
               message: '聊天记录获取失败',
@@ -211,7 +212,6 @@ export default {
     if(this.arrMessage.length === 0) {
         this.addTitle = 1
     }
-    console.log(this.arrMessage+"====arrMessage")
 
   },
   created() {
