@@ -83,9 +83,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     @Override
     public List<User> selectUsersByUsername(String username) {
-        if(username == null) {
-            return userMapper.selectList(null);
-        }
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.like("username", username);
         return userMapper.selectList(queryWrapper);

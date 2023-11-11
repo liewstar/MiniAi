@@ -1,31 +1,29 @@
 <template>
-  <div class="bg-slate-50">
-    <section>
-      <div class="h-auto  bg-black text-white">
-        <nav class="font-inter  h-auto  lg:relative lg:top-0" x-data="{isOpen: false, menuOne:false}">
-          <div class="flex flex-col px-6 py-6 lg:flex-row lg:items-center lg:justify-between lg:px-10 lg:py-4 xl:px-20">
-            <a href="#">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-code">
-                <path d="M16 18l6-6-6-6M8 6l-6 6 6 6"></path>
-              </svg>
-            </a>
-            <div class="mt-14 flex flex-col space-y-8 lg:mt-0 lg:flex lg:flex-row lg:space-x-1 lg:space-y-0">
-              <router-link to="/" class="font-inter rounded-lg hover:text-[#c9fd02] lg:px-6 lg:py-4">用户管理</router-link>
-              <router-link to="/price" class="font-inter rounded-lg hover:text-[#c9fd02] lg:px-6 lg:py-4">订单管理</router-link>
-              <a href="#" class="font-inter rounded-lg hover:text-[#c9fd02] lg:px-6 lg:py-4">数据统计</a>
-              <router-link to="/about" class="font-inter rounded-lg pb-8 hover:text-[#c9fd02] lg:px-6 lg:py-4 lg:pb-0">关于</router-link>
-            </div>
-            <div class="flex flex-col space-y-8 lg:flex lg:flex-row lg:space-x-3 lg:space-y-0">
-              <router-link to="/register" class="inline-block rounded-full bg-white px-5 py-3 text-center font-bold text-black transition hover:border-black hover:bg-[#c9fd02]">去网站</router-link>
-            </div>
+  <div class="mx-auto px-4 py-8" style="height: 830px;">
+    <div class="grid grid-cols-12 gap-4" style="height: 100%;">
+      <div class="col-span-2">
+        <!-- 左侧历史消息对话框 -->
+        <div style="height: 720px" class="bg-black rounded-lg p-4 shadow text-white overflow-y-auto scrollbar scrollbar-content">
+          <div v-for="conversation in allConversations" :key="conversation.id" @click="clickConversation(conversation.id)">
+            <Conversation :time="conversation.createdTime" :title="conversation.title"/>
           </div>
-        </nav>
+        </div>
+
+        <form name="email-form" method="get" class="relative w-full mt-4">
+          <el-button @click="toPersonal" style=" background-color: black;"><i class="el-icon-s-tools"></i></el-button>
+          <el-button @click="dialogVisible = true" class="right-20" style="background-color: black" ><i class="el-icon-circle-plus"></i> <span style="color: white">新的聊天</span></el-button>
+        </form>
+
+
+
+
       </div>
-      <router-view></router-view>
-      <footer>
-        <Footer/>
-      </footer>
-    </section>
+      <div style="height: 100%" class="col-span-10">
+        <div class="h-full w-full bg-white rounded-lg p-4 shadow relative">
+          <router-view/>
+        </div>
+      </div>
+    </div>
   </div>
 
 </template>

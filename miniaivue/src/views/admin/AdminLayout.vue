@@ -10,9 +10,9 @@
               </svg>
             </a>
             <div class="mt-14 flex flex-col space-y-8 lg:mt-0 lg:flex lg:flex-row lg:space-x-1 lg:space-y-0">
-              <router-link to="/" class="font-inter rounded-lg hover:text-[#c9fd02] lg:px-6 lg:py-4">用户管理</router-link>
-              <router-link to="/price" class="font-inter rounded-lg hover:text-[#c9fd02] lg:px-6 lg:py-4">订单管理</router-link>
-              <a href="#" class="font-inter rounded-lg hover:text-[#c9fd02] lg:px-6 lg:py-4">数据统计</a>
+              <router-link to="/admin/users" class="font-inter rounded-lg hover:text-[#c9fd02] lg:px-6 lg:py-4">用户管理</router-link>
+              <router-link to="/admin/orders" class="font-inter rounded-lg hover:text-[#c9fd02] lg:px-6 lg:py-4">订单管理</router-link>
+              <router-link to="/admin/echarts" class="font-inter rounded-lg hover:text-[#c9fd02] lg:px-6 lg:py-4">数据统计</router-link>
               <router-link to="/about" class="font-inter rounded-lg pb-8 hover:text-[#c9fd02] lg:px-6 lg:py-4 lg:pb-0">关于</router-link>
             </div>
             <div class="flex flex-col space-y-8 lg:flex lg:flex-row lg:space-x-3 lg:space-y-0">
@@ -21,7 +21,10 @@
           </div>
         </nav>
       </div>
-      <router-view></router-view>
+
+
+          <router-view></router-view>
+
       <footer>
         <Footer/>
       </footer>
