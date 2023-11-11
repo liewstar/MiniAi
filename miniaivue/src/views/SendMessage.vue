@@ -31,6 +31,10 @@ export default {
         this.conversationId = newQuery
         this.getAllMessage(newQuery)
         this.changeSet()
+        this.$nextTick(() => {
+          const container = this.$refs.messageContainer;
+          container.scrollTop = container.scrollHeight;
+        });
       },
       deep: true
     }
@@ -47,6 +51,13 @@ export default {
           }
         })
       }
+      //验证携带历史消息数
+      //TODO 验证是否有预设，排除预设
+      let messageListLength = this.messageBody.messageList.length - this.presetIndex
+      if(messageListLength > this.takeMessages * 2) {
+        this.messageBody.messageList.splice(this.presetIndex,messageListLength-this.takeMessages*2)
+      }
+      console.log(this.messageBody.messageList)
       //先查数据库，赋初值
       //user和bot消息顺序都根据id来
       //消息发送的user位置
@@ -191,6 +202,7 @@ export default {
         this.messageBody.temperature = settings.temperature;
         this.messageBody.presencePenalty = settings.presencePenalty;
         this.messageBody.frequencyPenalty = settings.frequencyPenalty;
+        this.takeMessages = settings.takeMessages
       }
 
       const presetData = localStorage.getItem("preset")
@@ -198,8 +210,7 @@ export default {
       let copyPreset = preset
       if(copyPreset) {
         this.messageBody.messageList = copyPreset
-        console.log("messageBody")
-        console.log(this.messageBody)
+        this.presetIndex = copyPreset.length
         //删除预设记录
         localStorage.removeItem("preset")
       }
@@ -219,8 +230,10 @@ export default {
   },
   data(){
     return{
+      takeMessages: 0,
       addTitle:0,
       msg:'',
+      presetIndex:0,
       //聊天记录
       arrMessage:[
         {

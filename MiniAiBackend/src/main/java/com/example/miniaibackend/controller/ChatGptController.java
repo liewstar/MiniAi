@@ -30,6 +30,7 @@ public class ChatGptController {
     @PostMapping("/sse")
     @CrossOrigin
         public SseEmitter sendMsg(@RequestBody AcceptDTO acceptDTO) {
+        System.out.println(acceptDTO.getMessageList());
         Integer userId = acceptDTO.getUserId();
         int size = acceptDTO.getMessageList().size();
         com.plexpt.chatgpt.entity.chat.Message message = acceptDTO.getMessageList().get(size - 1);
@@ -55,6 +56,7 @@ public class ChatGptController {
                     .temperature(acceptDTO.getTemperature())
                     .presencePenalty(acceptDTO.getPresencePenalty())
                     .frequencyPenalty(acceptDTO.getFrequencyPenalty())
+                    .topP(1)
                     .build();
 
             ChatEventListener listener = new ChatEventListener(sseEmitter);
