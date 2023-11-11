@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.xml.crypto.Data;
 import java.util.List;
 
 @RestController
@@ -28,5 +29,11 @@ public class MessageController {
     public Result<?> getMessage(Integer conversationId) {
         //return ResponseEntity.ok(messageService.getMessage(conversationId));
         return Result.ok(messageService.getMessage(conversationId)).setMessage("获取聊天记录成功");
+    }
+
+    //管理员查看消息统计
+    @PostMapping("/statistics")
+    public Result<?> selectStatistics(Data data) {
+        return Result.ok(messageService.statisticsByDay(data));
     }
 }

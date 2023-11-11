@@ -1,6 +1,7 @@
 package com.example.miniaibackend.controller;
 
 import com.example.miniaibackend.domain.Order;
+import com.example.miniaibackend.models.Result;
 import com.example.miniaibackend.service.OrderService;
 import jakarta.annotation.Resource;
 import org.springframework.http.ResponseEntity;
@@ -26,15 +27,20 @@ public class OrderController {
     @Resource
     OrderService orderService;
 
+    //用户发送订单
     @PostMapping("/sendOrder")
-    public ResponseEntity<?> sendOrder(Integer userId, BigDecimal orderAmount, int days) {
-        return null;
+    public Result<?> sendOrder(Integer userId, BigDecimal orderAmount, int days) {
+        return Result.ok(orderService.sendOrder(userId,orderAmount,days));
     }
 
+    //管理员查看订单
     @PostMapping("/selectOrder")
-    public ResponseEntity<List<Order>> selectOrder(HashMap<String, Object> map) {
-        return ResponseEntity.ok(orderService.selectOrder(map));
+    public Result<?> selectOrder(HashMap<String, Object> map,int pageNum, int pageSize) {
+        return Result.ok(orderService.selectOrder(map,pageNum,pageSize));
     }
+
+    //管理员查看订单统计
+
 
 
 }

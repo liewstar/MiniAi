@@ -1,5 +1,6 @@
 package com.example.miniaibackend.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.example.miniaibackend.domain.Order;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -15,8 +16,10 @@ import java.util.Map;
 * @createDate 2023-11-01 08:59:48
 */
 public interface OrderService extends IService<Order> {
-    String sendOrder(Integer userId, BigDecimal orderAmount, int days);
+    Order sendOrder(Integer userId, BigDecimal orderAmount, int days);
 
-    List<Order> selectOrder(Map<String, Object> map);
+    IPage<Order> selectOrder(Map<String, Object> map,int pageNum, int pageSize);
+
+
 
 }

@@ -2,6 +2,12 @@ package com.example.miniaibackend.mapper;
 
 import com.example.miniaibackend.domain.Order;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+
+import javax.xml.crypto.Data;
+import java.util.List;
+import java.util.Map;
 
 /**
 * @author 29354
@@ -10,6 +16,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @Entity com.example.miniaibackend.domain.Order
 */
 public interface OrderMapper extends BaseMapper<Order> {
+
+
 
 }
 

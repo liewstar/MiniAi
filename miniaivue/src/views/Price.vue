@@ -14,7 +14,7 @@
           <p class="mb-6 text-base font-light text-[#636262] md:mb-10 lg:mb-12">适合对Ai尝鲜的个人用户</p>
           <h2 class="mb-5 text-3xl font-bold md:mb-6 md:text-5xl lg:mb-8">$99<span class="text-sm font-light sm:text-sm">/year</span>
           </h2>
-          <a @click="bug(99)" class="mb-5 w-full rounded-md bg-black px-6 py-3 text-center font-semibold text-white md:mb-6 lg:mb-8">立即购买</a>
+          <a @click="buy(99)" class="mb-5 w-full rounded-md bg-black px-6 py-3 text-center font-semibold text-white md:mb-6 lg:mb-8">立即购买</a>
           <div class="mt-2 flex items-center">
             <img src="https://assets.website-files.com/6458c625291a94a195e6cf3a/6458c625291a94a84be6cf60_check-mark.svg" alt="" class="mr-2 inline-block w-4" />
             <p class="text-base">每日限制100条对话</p>
@@ -27,7 +27,7 @@
           <p class="mb-6 text-base font-light text-[#636262] md:mb-10 lg:mb-12">适合需要Ai生产力的个人用户</p>
           <h2 class="mb-5 text-3xl font-bold md:mb-6 md:text-5xl lg:mb-8">$149<span class="text-sm font-light sm:text-sm">/year</span>
           </h2>
-          <a @click="bug(149)" class="mb-5 w-full rounded-md bg-black px-6 py-3 text-center font-semibold text-white md:mb-6 lg:mb-8">立即购买</a>
+          <a @click="buy(149)" class="mb-5 w-full rounded-md bg-black px-6 py-3 text-center font-semibold text-white md:mb-6 lg:mb-8">立即购买</a>
           <div class="mt-2 flex items-center">
             <img src="https://assets.website-files.com/6458c625291a94a195e6cf3a/6458c625291a94a84be6cf60_check-mark.svg" alt="" class="mr-2 inline-block w-4" />
             <p class="text-base">每日限制500条对话</p>
@@ -48,7 +48,7 @@
           <p class="mb-6 text-base font-light text-[#636262] md:mb-10 lg:mb-12">适合专业团队或者对Ai重度依赖的个人</p>
           <h2 class="mb-5 text-3xl font-bold md:mb-6 md:text-5xl lg:mb-8">$299<span class="text-sm font-light sm:text-sm">/year</span>
           </h2>
-          <a @click="bug(299)" class="mb-5 w-full rounded-md bg-black px-6 py-3 text-center font-semibold text-white md:mb-6 lg:mb-8">立即购买</a>
+          <a @click="buy(299)" class="mb-5 w-full rounded-md bg-black px-6 py-3 text-center font-semibold text-white md:mb-6 lg:mb-8">立即购买</a>
           <div class="mt-2 flex items-center">
             <img src="https://assets.website-files.com/6458c625291a94a195e6cf3a/6458c625291a94a84be6cf60_check-mark.svg" alt="" class="mr-2 inline-block w-4" />
             <p class="text-base">无限制时长</p>
@@ -72,13 +72,13 @@
 </template>
 
 <script>
+import api from "@/api"
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Price",
   methods:{
     buy(money) {
-      // api.post("/")
-      console.log(money)
+      api.post("/")
     }
   }
 }

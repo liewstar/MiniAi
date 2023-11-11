@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@traptitech/markdown-it-katex": "^3.6.0",
+    "echarts": "^5.4.3",
     "fetch-event-source": "^1.0.0-alpha.2",
     "markdown-it": "^13.0.2",
     "markdown-it-highlightjs": "^4.0.1"
