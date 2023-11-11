@@ -10,6 +10,7 @@ import org.apache.ibatis.annotations.Result;
 import org.springframework.stereotype.Service;
 
 import javax.xml.crypto.Data;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -32,8 +33,8 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message>
     }
 
     @Override
-    public Map<String, String> statisticsByDay(Data data) {
-        return messageMapper.selectMessageByHourAndDay(data);
+    public List<Map<String, String>> statisticsByDay(String date) {
+        return messageMapper.selectMessageByHourAndDay(date);
     }
 }
 

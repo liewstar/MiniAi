@@ -78,6 +78,7 @@ export default {
   name: "Price",
   methods:{
     buy(money) {
+      console.log(money)
       api.post("/")
     }
   }

@@ -205,6 +205,9 @@ export default {
         this.takeMessages = settings.takeMessages
       }
 
+      //先清空，后面再赋干净的预设
+      this.messageBody.messageList.length = 0
+
       const presetData = localStorage.getItem("preset")
       const preset = JSON.parse(presetData)
       let copyPreset = preset

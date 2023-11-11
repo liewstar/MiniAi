@@ -34,8 +34,9 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
     public Order sendOrder(Integer userId, BigDecimal orderAmount, int days) {
         //都是新增订单，但是需要判断用户此时是否在会员期内，在则延长之前的日期新增，不在则直接新增
         QueryWrapper<Order> queryWrapperExist = new QueryWrapper<>();
+        Date now = new Date();
         queryWrapperExist.eq("user_id",userId)
-                .between("start_date","end_date",new Date())
+                .ge("end_date",now)
                 .orderByDesc("id")
                 .last("LIMIT 1");
         Order order = orderMapper.selectOne(queryWrapperExist);

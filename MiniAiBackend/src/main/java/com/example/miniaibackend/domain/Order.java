@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
  * 
  * @TableName order
  */
-@TableName(value ="order")
+@TableName(value ="`order`")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,7 +24,7 @@ public class Order implements Serializable {
     /**
      * 
      */
-    @TableId
+    @TableId(type = IdType.AUTO)
     private Integer id;
 
     /**

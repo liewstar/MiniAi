@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import javax.xml.crypto.Data;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,12 +28,12 @@ public interface MessageMapper extends BaseMapper<Message> {
             "  UNION ALL SELECT 21 UNION ALL SELECT 22 UNION ALL SELECT 23\n" +
             ") AS hours\n" +
             "LEFT JOIN (\n" +
-            "  SELECT HOUR(m.`timestamp`) AS hour, COUNT(*) AS message_count\n" +
+            "  SELECT HOUR(m.timestamp) AS hour, COUNT(*) AS message_count\n" +
             "  FROM message m\n" +
-            "  WHERE DATE(m.`timestamp`) = #'{date}'\n" +
-            "  GROUP BY HOUR(m.`timestamp`)\n" +
+            "  WHERE DATE(m.timestamp) = #{date}\n" +
+            "  GROUP BY HOUR(m.timestamp)\n" +
             ") AS counts ON hours.hour = counts.hour;")
-    Map<String, String> selectMessageByHourAndDay(@Param("data") Data data);
+    List<Map<String,String>> selectMessageByHourAndDay(@Param("date") String date);
 
 }
 

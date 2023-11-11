@@ -4,6 +4,7 @@ import com.example.miniaibackend.domain.Message;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import javax.xml.crypto.Data;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +16,6 @@ import java.util.Map;
 public interface MessageService extends IService<Message> {
     List<Message> getMessage(Integer conversationId);
 
-    Map<String, String> statisticsByDay(Data data);
+    List<Map<String,String>> statisticsByDay(String date);
 
 }
