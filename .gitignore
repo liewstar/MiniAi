@@ -38,3 +38,6 @@ MiniAiBackend/.idea/
 MiniAiBackend/.mvn/
 MiniAiBackend/mvnw.cmd
 MiniAiBackend/mvnw
+
+MiniAiVue/.env.development
+

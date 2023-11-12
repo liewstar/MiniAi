@@ -80,14 +80,19 @@ export default {
     buy(money,days) {
       console.log(money)
       const userId = localStorage.getItem("MiniAiUserId")
-      api.post("/order/sendOrder?userId="+userId+"&orderAmount="+money+"&days="+days)
-      .then(response => {
-        if(response.code === 200) {
-          this.$message.success("套餐购买成功")
-        }else {
-          this.$message.error("套餐购买失败")
-        }
-      })
+      if(userId == null) {
+        this.$message.info("请先登陆账号")
+        this.$router.push("/login")
+      }else {
+        api.post("/order/sendOrder?userId="+userId+"&orderAmount="+money+"&days="+days)
+            .then(response => {
+              if(response.code === 200) {
+                this.$message.success("套餐购买成功")
+              }else {
+                this.$message.error("套餐购买失败")
+              }
+            })
+      }
     }
   }
 }

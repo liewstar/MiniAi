@@ -9,7 +9,7 @@
   <div class="w-full absolute left-1/2 transform -translate-x-1/2 bottom-3">
     <div class="mx-auto mb-4 flex w-3/4 justify-center">
       <div class="relative w-full max-w-[75%]">
-        <input v-model="msg" class="rounded-lg h-9 w-full border border-solid border-black bg-white px-3 py-6 text-sm text-[#333333]" placeholder="向MiniAi提问" />
+        <input v-model="msg" class="rounded-lg h-9 w-full border border-solid border-black bg-white px-3 py-6 text-sm text-[#333333]" placeholder="向MiniAi提问(按下ctrl+enter发送)" />
         <input type="submit" @click="sendMsg" value="发送" class="rounded-lg relative right-0 top-[5px] w-full cursor-pointer bg-black px-6 py-2 text-center font-semibold text-white sm:absolute sm:right-[5px] sm:w-auto" />
       </div>
     </div>
@@ -40,8 +40,13 @@ export default {
     }
   },
   methods:{
+    // handleKeyDown(event) {
+    //   if(event.ctrlKey && event.key == 'enter') {
+    //     this.sendMsg()
+    //   }
+    // },
     sendMsg(){
-      if(this.addTitle === 0) {
+      if(this.addTitle === 0 && this.msg !== '') {
         //修改标题
         const title = this.msg.substr(0,8)
           api.post("/conversation/changeConversation?conversationId="+this.conversationId+"&title="+title)
