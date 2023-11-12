@@ -1,20 +1,59 @@
 <template>
   <div>
-    <div class=" w-screen" style="height:700px">
+    <div class=" w-screen" style="height:600px">
       <div id="echart"></div>
     </div>
   </div>
 </template>
 <script>
+
+import api from "@/api";
+
 export default {
   data() {
-    return {};
+    return {
+      x:[],
+      y:[]
+    };
+  },
+  props:{
+    date:{
+      type:Date,
+      required:true
+    }
+  },
+
+  watch: {
+    date(newValue, oldValue) {
+      // 执行更新操作
+      console.log('old:'+oldValue+" new:"+newValue)
+      this.x.length = 0
+      this.y.length = 0
+      this.getEchart()
+    }
   },
   // 页面初始化挂载dom
   mounted() {
-    this.getLoadEcharts();
+    console.log(this.date+"componet")
+    this.getEchart()
+
   },
   methods: {
+    getEchart() {
+      api.post("/message/statistics?date="+this.date.toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai' }).toString().substring(0,10))
+          .then(response => {
+            if(response.code === 200) {
+              let data = response.data;
+              for(let i =0; i< data.length;i++) {
+                this.x.push(data[i].hour);
+                this.y.push(data[i].message_count);
+                this.getLoadEcharts();
+              }
+            }else {
+              this.$message.error("网络错误")
+            }
+          })
+    },
     getLoadEcharts() {
       var myChart = this.$echarts.init(
           document.getElementById("echart")
@@ -25,14 +64,14 @@ export default {
         },
         xAxis: {
           type: 'category',
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+          data: this.x
         },
         yAxis: {
           type: 'value'
         },
         series: [
           {
-            data: [820, 932, 901, 934, 1290, 1330, 1320],
+            data: this.y,
             type: 'line',
             smooth: true,
           }

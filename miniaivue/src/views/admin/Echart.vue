@@ -6,29 +6,23 @@
               <el-col :span="6">
                 <div>
                   <el-statistic
-                      group-separator=","
-                      :precision="2"
-                      :value="value2"
+                      :value="info.allPeople"
                       title="网站总用户"
                   ></el-statistic>
                 </div>
               </el-col>
               <el-col :span="6">
                 <div>
-                  <el-statistic title="消息总记录数">
-                    <template slot="formatter">
-                      456/2
-                    </template>
-                  </el-statistic>
+                  <el-statistic
+                      title="消息总记录数"
+                      :value="info.allMessage"
+                  ></el-statistic>
                 </div>
               </el-col>
               <el-col :span="6">
                 <div>
                   <el-statistic
-                      group-separator=","
-                      :precision="2"
-                      decimal-separator="."
-                      :value="value1"
+                      :value="info.allPay"
                       title="付费用户数"
                   >
                     <template slot="prefix">
@@ -42,16 +36,14 @@
               </el-col>
               <el-col :span="6">
                 <div>
-                  <el-statistic :value="like ? 521 : 520" title="付费比例">
+                  <el-statistic :value="info.payPercent"
+                                :precision="2"
+                                title="付费比例">
                     <template slot="suffix">
-              <span @click="like = !like" class="like">
                 <i
                     class="el-icon-star-on"
                     style="color:red"
-                    v-show="!!like"
                 ></i>
-                <i class="el-icon-star-off" v-show="!like"></i>
-              </span>
                     </template>
                   </el-statistic>
                 </div>
@@ -61,13 +53,22 @@
         </div>
         <div class="w-full p-2 h-screen">
           <el-card class="h-full">
-            <line-chart></line-chart>
+            <el-date-picker
+                class="ml-32 mb-8"
+                v-model="date"
+                align="right"
+                type="date"
+                placeholder="选择日期"
+                >
+            </el-date-picker>
+            <line-chart :date="date"></line-chart>
           </el-card>
         </div>
   </div>
 </template>
 
 <script>
+import api from "@/api";
 import LineChart from "@/components/LineChart";
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -75,19 +76,35 @@ export default {
   components: {LineChart},
   data() {
     return {
-      like: true,
-      value1: 4154.564,
-      value2: 1314,
-      title: "增长人数",
+      info:
+        {
+          allPeople: 0,
+          allMessage: 0,
+          allPay: 0,
+          payPercent: 0,
+        },
+      date:new Date()
     };
   },
+  methods:{
+    getCount(){
+      api.post("/count/countInformation")
+      .then(response =>{
+        if(response.code === 200) {
+          this.info = response.data
+        }else {
+          this.$message.error("网络错误，请刷新");
+        }
+      })
+    }
+  },
+  mounted() {
+    this.getCount()
+    console.log(this.date)
+  }
 }
 </script>
 
 <style scoped>
-.like {
-  cursor: pointer;
-  font-size: 25px;
-  display: inline-block;
-}
+
 </style>
