@@ -8,8 +8,8 @@
             <el-card>
               <h4>{{commit.commit.message}}</h4>
               <div style="display: flex; align-items: center;" class="mt-1">
-                <img :src="commit.author.avatar_url" alt="小头像" style="width: 25px; height: 25px;">
-                <p class="ml-1">{{commit.author.login}} 提交于 {{commit.commit.author.date.replace("T",' ').replace("Z",'')}}</p>
+                <el-avatar :size="30" :src="commit.author.avatar_url"></el-avatar>
+                <p class="ml-1">{{commit.author.login}} 提交于 {{commit.commit.author.date}}</p>
               </div>
             </el-card>
           </div>
@@ -49,6 +49,11 @@ export default {
         console.log(response)
         this.loading = false
         this.commits = response.data
+        for(let i=0;i<this.commits.length;i++) {
+          let utcTime = new Date(this.commits[i].commit.author.date);
+          let beijingTime = utcTime.toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai' });
+          this.commits[i].commit.author.date = beijingTime
+        }
       }else {
         this.$message.error("网络错误")
       }
