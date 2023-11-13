@@ -1,14 +1,12 @@
 package com.example.miniaibackend.controller;
 
 import com.example.miniaibackend.domain.Order;
+import com.example.miniaibackend.models.OrderArg;
 import com.example.miniaibackend.models.Result;
 import com.example.miniaibackend.service.OrderService;
 import jakarta.annotation.Resource;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.xml.crypto.Data;
 import java.math.BigDecimal;
@@ -35,8 +33,9 @@ public class OrderController {
 
     //管理员查看订单
     @PostMapping("/selectOrder")
-    public Result<?> selectOrder(HashMap<String, Object> map,int pageNum, int pageSize) {
-        return Result.ok(orderService.selectOrder(map,pageNum,pageSize));
+    public Result<?> selectOrder(@RequestBody OrderArg orderArg) {
+        System.out.println(orderArg);
+        return Result.ok(orderService.selectOrder(orderArg.getMap(),orderArg.getPageNum(),orderArg.getPageSize()));
     }
 
     //管理员查看订单统计

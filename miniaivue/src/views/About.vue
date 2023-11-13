@@ -58,6 +58,9 @@ export default {
         this.$message.error("网络错误")
       }
     })
+    .catch(error => {
+      this.$message.error(error)
+    })
   }
 }
 </script>

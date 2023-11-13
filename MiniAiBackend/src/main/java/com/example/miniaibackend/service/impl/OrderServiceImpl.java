@@ -59,6 +59,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
 
     @Override
     public IPage<Order> selectOrder(Map<String, Object> map,int pageNum, int pageSize) {
+        System.out.println(pageNum);
+        System.out.println(pageSize);
         Page<Order> page = new Page<>(pageNum, pageSize);
         QueryWrapper<Order> queryWrapper = new QueryWrapper<>();
         for (Map.Entry<String, Object> entry : map.entrySet()) {

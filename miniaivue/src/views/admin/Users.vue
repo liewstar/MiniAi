@@ -1,116 +1,70 @@
 <template>
-
-
-
   <div>
-    <div>
       <div class="w-full p-2">
         <el-card>
-          <el-form :label-position="labelPosition" label-width="80px" :model="formLabelAlign">
-            <el-form-item label="名称">
-              <el-input ></el-input>
-            </el-form-item>
+          <el-form label-width="80px">
+            <div class="flex">
+              <el-form-item label="用户名">
+                <el-input v-model="username"></el-input>
+              </el-form-item>
+              <div class="ml-4">
+                <el-button class="" type="primary" @click="getData">查找</el-button>
+              </div>
+            </div>
+
           </el-form>
+
         </el-card>
       </div>
-      <div class="w-full p-2 h-screen">
-        <el-card class="h-full">123</el-card>
+      <div class="w-full p-2 h-screen" >
+        <el-card class="h-full" style="overflow: auto;">
+          <el-table
+              :data="tableData"
+              style="width: 100%">
+            <el-table-column
+                prop="username"
+                label="姓名"
+                width="180">
+            </el-table-column>
+            <el-table-column
+                prop="email"
+                label="邮箱"
+                width="180">
+            </el-table-column>
+            <el-table-column
+                prop="balance"
+                label="余额">
+            </el-table-column>
+            <el-table-column label="操作">
+              <template slot-scope="scope">
+                <el-button type="primary" @click="handleEdit(scope.row)">修改信息</el-button>
+                <el-button type="danger" @click="handleDelete(scope.row)">删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-card>
       </div>
-
-    </div>
   </div>
-
-<!--  <div class="flex justify-center items-center h-screen p-4">-->
-<!--    <el-card class="w-full h-full">-->
-<!--      <div>-->
-<!--        <el-row :gutter="20">-->
-<!--          <el-col :span="6">-->
-<!--            <div class="grid-content bg-purple">-->
-<!--              <el-row :gutter="8">-->
-<!--                <el-col :span="5">-->
-<!--                  用户姓名-->
-<!--                </el-col>-->
-<!--                <el-col :span="12">-->
-<!--                  <el-input></el-input>-->
-<!--                </el-col>-->
-<!--                <el-col :span="6">-->
-<!--                  <el-button>查询</el-button>-->
-<!--                </el-col>-->
-<!--              </el-row>-->
-<!--            </div>-->
-<!--          </el-col>-->
-<!--          <el-col :span="6"><div class="grid-content bg-purple"></div></el-col>-->
-<!--          <el-col :span="6"><div class="grid-content bg-purple"></div></el-col>-->
-<!--          <el-col :span="6"><div class="grid-content bg-purple"></div></el-col>-->
-<!--        </el-row>-->
-
-<!--        <div>-->
-<!--          <el-table-->
-<!--              :data="tableData"-->
-<!--              style="width: 100%">-->
-<!--            <el-table-column-->
-<!--                label="日期"-->
-<!--                width="180">-->
-<!--              <template slot-scope="scope">-->
-<!--                <i class="el-icon-time"></i>-->
-<!--                <span style="margin-left: 10px">{{ scope.row.date }}</span>-->
-<!--              </template>-->
-<!--            </el-table-column>-->
-<!--            <el-table-column-->
-<!--                label="姓名"-->
-<!--                width="180">-->
-<!--              <template slot-scope="scope">-->
-<!--                <el-popover trigger="hover" placement="top">-->
-<!--                  <p>姓名: {{ scope.row.name }}</p>-->
-<!--                  <p>住址: {{ scope.row.address }}</p>-->
-<!--                  <div slot="reference" class="name-wrapper">-->
-<!--                    <el-tag size="medium">{{ scope.row.name }}</el-tag>-->
-<!--                  </div>-->
-<!--                </el-popover>-->
-<!--              </template>-->
-<!--            </el-table-column>-->
-<!--            <el-table-column label="操作">-->
-<!--              <template slot-scope="scope">-->
-<!--                <el-button-->
-<!--                    size="mini"-->
-<!--                    @click="handleEdit(scope.$index, scope.row)">编辑</el-button>-->
-<!--                <el-button-->
-<!--                    size="mini"-->
-<!--                    type="danger"-->
-<!--                    @click="handleDelete(scope.$index, scope.row)">删除</el-button>-->
-<!--              </template>-->
-<!--            </el-table-column>-->
-<!--          </el-table>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </el-card>-->
-<!--  </div>-->
 
 </template>
 
 <script>
+import api from "@/api";
+
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Users",
   data() {
     return {
-      tableData: [{
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1517 弄'
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1519 弄'
-      }, {
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1516 弄'
-      }]
+      username:'',
+      tableData: [
+        {
+          id:1,
+          email: '2935437378@qq.com',
+          username: '王小虎',
+          balance: 562
+        },
+      ]
     }
   },
   methods: {
@@ -119,7 +73,31 @@ export default {
     },
     handleDelete(index, row) {
       console.log(index, row);
+    },
+    getData() {
+      api.post("/users/selectUsers?username="+this.username)
+      .then(response => {
+        if(response.code === 200) {
+          this.tableData = response.data
+          for(let i =0; i< this.tableData.length; i++) {
+            if(this.tableData[i].balance === null) {
+              this.tableData[i].balance = 0
+            }
+            if(this.tableData[i].email === null) {
+              this.tableData[i].email = "暂未设置"
+            }
+          }
+        }else {
+          this.$message.error("网络错误")
+        }
+      })
+      .catch(error => {
+        this.$message.error(error)
+      })
     }
+  },
+  mounted() {
+    this.getData()
   }
 }
 </script>
