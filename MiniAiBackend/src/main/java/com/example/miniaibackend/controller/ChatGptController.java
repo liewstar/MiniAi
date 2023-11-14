@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
+
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 import okhttp3.sse.EventSource;
@@ -29,7 +30,7 @@ public class ChatGptController {
 
     @PostMapping("/sse")
     @CrossOrigin
-        public SseEmitter sendMsg(@RequestBody AcceptDTO acceptDTO) {
+    public SseEmitter sendMsg(@RequestBody AcceptDTO acceptDTO) {
         Integer userId = acceptDTO.getUserId();
         int size = acceptDTO.getMessageList().size();
         com.plexpt.chatgpt.entity.chat.Message message = acceptDTO.getMessageList().get(size - 1);
@@ -41,13 +42,14 @@ public class ChatGptController {
             messageMapper.insert(userMessage);
         }
         SseEmitter sseEmitter = new SseEmitter(-1L);
-        try{
+        try {
             ChatGPTStream chatGPTStream = ChatGPTStream.builder()
                     .apiKey(acceptDTO.getToken())
                     .apiHost(acceptDTO.getEndpoint())
                     .timeout(5000)
                     .build()
-                    .init(); ChatCompletion chatCompletion = ChatCompletion.builder()
+                    .init();
+            ChatCompletion chatCompletion = ChatCompletion.builder()
                     //                       .model(ChatCompletion.Model.GPT_3_5_TURBO.getName())
                     .model(acceptDTO.getModel())
                     .messages(acceptDTO.getMessageList())
@@ -66,10 +68,9 @@ public class ChatGptController {
                 return;
             });
             chatGPTStream.streamChatCompletion(chatCompletion, listener);
-        }catch (Exception e) {
-            System.out.println(e.getMessage()+"===");
+        } catch (Exception e) {
+            System.out.println(e.getMessage() + "===");
         }
-
 
 
         return sseEmitter;
