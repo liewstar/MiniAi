@@ -13,6 +13,7 @@ import UserLayout from "@/views/UserLayout";
 import AdminLayout from "@/views/admin/AdminLayout";
 import MainPage from "@/views/MainPage";
 import Loading from "@/views/Loading";
+import FAQ from "@/views/FAQ";
 
 
 Vue.use(VueRouter)
@@ -27,6 +28,11 @@ const routes = [
               path:'',
               name: Loading,
               component: Loading
+            },
+            {
+                path:'/faq',
+                name: FAQ,
+                component: FAQ
             },
             {
                 path: '/about',
@@ -80,6 +86,11 @@ const routes = [
         component: AdminLayout,
         children: [
             {
+                path: '',
+                name: 'Echarts',
+                component: Echart
+            },
+            {
                 path: 'users',
                 name: 'Users',
                 component: Users
@@ -111,7 +122,7 @@ router.beforeEach((to, from, next) => {
     const token = localStorage.getItem('MiniAiToken');
 
     // 如果存在Token，允许访问页面
-    if (token || to.path === '/login' || to.path === '/register' || to.path === '/price' || to.path === '/about' || to.path === '/') {
+    if (token || to.path === '/login' || to.path === '/register' || to.path === '/price' || to.path === '/about' || to.path === '/' || to.path === '/faq' ) {
         next();
     } else {
         // 如果不存在Token，重定向到登录页面或其他需要登录的页面

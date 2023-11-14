@@ -57,6 +57,7 @@ public class ChatGptController {
                     .temperature(acceptDTO.getTemperature())
                     .presencePenalty(acceptDTO.getPresencePenalty())
                     .frequencyPenalty(acceptDTO.getFrequencyPenalty())
+                    .topP(1)
                     .build();
 
             ChatEventListener listener = new ChatEventListener(sseEmitter);

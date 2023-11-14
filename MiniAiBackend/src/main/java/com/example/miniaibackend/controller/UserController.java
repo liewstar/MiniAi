@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import retrofit2.http.POST;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -33,6 +34,13 @@ public class UserController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+
+    //管理员查看用户
+    @PostMapping("/selectUsers")
+    public Result<?> selectAllUsers(String username) {
+        return Result.ok(userService.selectUsersByUsername(username));
+    }
 
 
     @PostMapping("/changePassword")
@@ -56,7 +64,6 @@ public class UserController {
         if (i) {
             return Result.ok("注册成功");
         } else {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("args error");
             return Result.err(HttpStatus.BAD_REQUEST.value(), "注册失败");
         }
     }

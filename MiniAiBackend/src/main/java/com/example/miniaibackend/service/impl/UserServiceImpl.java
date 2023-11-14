@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 
 /**
 * @author 29354
@@ -28,7 +29,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     @Resource
     UserMapper userMapper;
 
-    @Autowired
+    @Resource
     private RoleToUserMapper roleToUserMapper;
 
     @Override
@@ -78,6 +79,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
         }
         return reply;
+    }
+
+    @Override
+    public List<User> selectUsersByUsername(String username) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.like("username", username);
+        return userMapper.selectList(queryWrapper);
     }
 
     private int addRole(User user){

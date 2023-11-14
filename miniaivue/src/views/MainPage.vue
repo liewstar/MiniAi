@@ -17,17 +17,10 @@
         <el-dialog
             :visible.sync="dialogVisible"
             width="15%"
-
             >
-
-<!--          <el-select v-model="selectPreset" class="p-4" lable="选择场景预设" >-->
-<!--            <el-option v-for="(preset, index) in presets" :key="index" :value="preset.name" :lable="preset.name"></el-option>-->
-<!--          </el-select>-->
           <el-button @click="choosePreset">选择场景</el-button>
           <el-button @click="newChat">直接开始</el-button>
           <span slot="footer" class="dialog-footer">
-<!--    <el-button @click="dialogVisible = false">取 消</el-button>-->
-<!--    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>-->
           </span>
         </el-dialog>
 

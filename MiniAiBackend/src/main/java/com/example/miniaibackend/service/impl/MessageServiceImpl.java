@@ -9,7 +9,10 @@ import jakarta.annotation.Resource;
 import org.apache.ibatis.annotations.Result;
 import org.springframework.stereotype.Service;
 
+import javax.xml.crypto.Data;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
 * @author 29354
@@ -27,6 +30,11 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message>
         QueryWrapper<Message> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("conversation_id", conversationId);
         return messageMapper.selectList(queryWrapper);
+    }
+
+    @Override
+    public List<Map<String, String>> statisticsByDay(String date) {
+        return messageMapper.selectMessageByHourAndDay(date);
     }
 }
 

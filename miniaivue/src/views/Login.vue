@@ -3,6 +3,8 @@
   <section>
     <div class="mx-auto w-full max-w-3xl px-5 py-16 md:px-10 md:py-24 lg:py-32">
       <div class="mx-auto max-w-xl bg-[#f2f2f7] px-8 py-12 text-center">
+        <h2 class="text-3xl font-bold md:text-5xl">MiniAi</h2>
+        <p class="mx-auto my-5 max-w-md text-sm text-[#636262] sm:text-base lg:mb-8"></p>
         <div class="mx-auto w-full max-w-[400px]">
           <div class="mx-auto mb-4 max-w-[400px] pb-4">
               <div class="relative">

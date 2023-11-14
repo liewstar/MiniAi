@@ -9,7 +9,7 @@
   <div class="w-full absolute left-1/2 transform -translate-x-1/2 bottom-3">
     <div class="mx-auto mb-4 flex w-3/4 justify-center">
       <div class="relative w-full max-w-[75%]">
-        <input v-model="msg" class="rounded-lg h-9 w-full border border-solid border-black bg-white px-3 py-6 text-sm text-[#333333]" placeholder="向MiniAi提问" />
+        <input v-model="msg" class="rounded-lg h-9 w-full border border-solid border-black bg-white px-3 py-6 text-sm text-[#333333]" placeholder="向MiniAi提问(按下ctrl+enter发送)" />
         <input type="submit" @click="sendMsg" value="发送" class="rounded-lg relative right-0 top-[5px] w-full cursor-pointer bg-black px-6 py-2 text-center font-semibold text-white sm:absolute sm:right-[5px] sm:w-auto" />
       </div>
     </div>
@@ -27,17 +27,26 @@ export default {
   watch: {
     '$route.query.conversationId': {
       handler(newQuery, oldQuery) {
-        console.log(oldQuery)
+        console.log("oldQuery:"+oldQuery+" newQuery:"+newQuery)
         this.conversationId = newQuery
         this.getAllMessage(newQuery)
         this.changeSet()
+        this.$nextTick(() => {
+          const container = this.$refs.messageContainer;
+          container.scrollTop = container.scrollHeight;
+        });
       },
       deep: true
     }
   },
   methods:{
+    // handleKeyDown(event) {
+    //   if(event.ctrlKey && event.key == 'enter') {
+    //     this.sendMsg()
+    //   }
+    // },
     sendMsg(){
-      if(this.addTitle === 0) {
+      if(this.addTitle === 0 && this.msg !== '') {
         //修改标题
         const title = this.msg.substr(0,8)
           api.post("/conversation/changeConversation?conversationId="+this.conversationId+"&title="+title)
@@ -47,6 +56,13 @@ export default {
           }
         })
       }
+      //验证携带历史消息数
+      //TODO 验证是否有预设，排除预设
+      let messageListLength = this.messageBody.messageList.length - this.presetIndex
+      if(messageListLength > this.takeMessages * 2) {
+        this.messageBody.messageList.splice(this.presetIndex,messageListLength-this.takeMessages*2)
+      }
+      console.log(this.messageBody.messageList)
       //先查数据库，赋初值
       //user和bot消息顺序都根据id来
       //消息发送的user位置
@@ -167,6 +183,7 @@ export default {
                 indexId: index
               }
             })
+            console.log(this.arrMessage)
           }else {
             this.$message({
               message: '聊天记录获取失败',
@@ -190,15 +207,18 @@ export default {
         this.messageBody.temperature = settings.temperature;
         this.messageBody.presencePenalty = settings.presencePenalty;
         this.messageBody.frequencyPenalty = settings.frequencyPenalty;
+        this.takeMessages = settings.takeMessages
       }
+
+      //先清空，后面再赋干净的预设
+      this.messageBody.messageList.length = 0
 
       const presetData = localStorage.getItem("preset")
       const preset = JSON.parse(presetData)
       let copyPreset = preset
       if(copyPreset) {
         this.messageBody.messageList = copyPreset
-        console.log("messageBody")
-        console.log(this.messageBody)
+        this.presetIndex = copyPreset.length
         //删除预设记录
         localStorage.removeItem("preset")
       }
@@ -211,7 +231,6 @@ export default {
     if(this.arrMessage.length === 0) {
         this.addTitle = 1
     }
-    console.log(this.arrMessage+"====arrMessage")
 
   },
   created() {
@@ -219,8 +238,10 @@ export default {
   },
   data(){
     return{
+      takeMessages: 0,
       addTitle:0,
       msg:'',
+      presetIndex:0,
       //聊天记录
       arrMessage:[
         {
