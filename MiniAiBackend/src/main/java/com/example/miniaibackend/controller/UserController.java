@@ -1,6 +1,7 @@
 package com.example.miniaibackend.controller;
 
 import com.example.miniaibackend.domain.User;
+import com.example.miniaibackend.models.PasswordVO;
 import com.example.miniaibackend.models.Result;
 import com.example.miniaibackend.models.UserDTO;
 import com.example.miniaibackend.service.UserService;
@@ -44,12 +45,13 @@ public class UserController {
 
 
     @PostMapping("/changePassword")
-    public ResponseEntity<String> changePassword(String username, String oldPassword, String newPassword) {
-        int i = userService.changePassword(username, oldPassword, newPassword);
+    public Result<String> changePassword(@RequestHeader("token") String token, @RequestBody PasswordVO passwordVO) {
+        int i = userService.changePassword(token, passwordVO.getOldPassword(), passwordVO.getNewPassword());
         if (i > 0) {
-            return ResponseEntity.ok("change success");
+            return Result.ok("change success");
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("password error");
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("password error");
+            return Result.err(403, "password error");
         }
     }
 
@@ -69,13 +71,8 @@ public class UserController {
     }
 
     @GetMapping("/getRole")
-    public Result<?> getRole(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        List<String> roles = new ArrayList<>();
-        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-        for (GrantedAuthority grantedAuthority : authorities){
-            roles.add(grantedAuthority.getAuthority());
-        }
+    public Result<?> getRole(@RequestHeader("token") String token){
+        List<String> roles = userService.getUserRoles(token);
         return Result.ok(roles);
     }
 }

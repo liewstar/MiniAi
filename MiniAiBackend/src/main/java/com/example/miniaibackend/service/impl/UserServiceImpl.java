@@ -4,16 +4,20 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.miniaibackend.domain.RoleToUser;
+import com.example.miniaibackend.domain.Roles;
 import com.example.miniaibackend.domain.User;
+import com.example.miniaibackend.mapper.RoleMapper;
 import com.example.miniaibackend.mapper.RoleToUserMapper;
 import com.example.miniaibackend.service.UserService;
 import com.example.miniaibackend.mapper.UserMapper;
+import com.example.miniaibackend.utils.TokenUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,6 +36,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     @Resource
     private RoleToUserMapper roleToUserMapper;
 
+    @Autowired
+    private RoleMapper roleMapper;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private TokenUtils tokenUtils;
+
     @Override
     public User checkUser(String username, String password) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
@@ -40,16 +53,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return userMapper.selectOne(queryWrapper);
     }
 
-    public int changePassword(String username, String oldPassword, String newPassword) {
+    public int changePassword(String token, String oldPassword, String newPassword) {
+        String username = tokenUtils.getUserNameInToken(token);
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("username", username);
-        queryWrapper.eq("password", oldPassword);
         User user = userMapper.selectOne(queryWrapper);
         if (user != null) {
-            //newpassword user
-            user.setPassword(newPassword);
             UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
-            updateWrapper.eq("username", username);
+            if (passwordEncoder.matches(oldPassword, user.getPassword())) {
+                //newpassword user
+                user.setPassword(passwordEncoder.encode(newPassword));
+                updateWrapper.eq("username", username);
+            }else{
+                return 0;
+            }
             return userMapper.update(user, updateWrapper);
         } else {
             //args error
@@ -97,6 +114,26 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
         userQueryWrapper.eq("username", user.getUsername());
         return userMapper.selectOne(userQueryWrapper).getId();
+    }
+
+    @Override
+    public List<String> getUserRoles(String token) {
+        String username = tokenUtils.getUserNameInToken(token);
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.eq("username", username);
+        User user = userMapper.selectOne(userQueryWrapper);
+        Integer userId = user.getId();
+        QueryWrapper<RoleToUser> roleToUserQueryWrapper = new QueryWrapper<>();
+        roleToUserQueryWrapper.eq("user_id", userId);
+        List<RoleToUser> roleToUserList = roleToUserMapper.selectList(roleToUserQueryWrapper);
+        List<String> roleList = new ArrayList<>();
+        for (RoleToUser role : roleToUserList){
+            QueryWrapper<Roles> rolesQueryWrapper = new QueryWrapper<>();
+            rolesQueryWrapper.eq("id", role.getRoleId());
+            Roles roles = roleMapper.selectOne(rolesQueryWrapper);
+            roleList.add("ROLE_"+roles.getRoleName());
+        }
+        return roleList;
     }
 }
 
