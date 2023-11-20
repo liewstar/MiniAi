@@ -32,10 +32,34 @@
 
 <script>
 import Footer from "@/views/Footer";
+import api from "@/api";
 
 export default {
   name: "UserLayout",
   components: {Footer},
+  methods:{
+    checkLogin() {
+      const userId = localStorage.getItem("MiniAiUserId");
+      api.post("/conversation/getConversation?userId="+userId)
+          .then((response) => {
+            if(response.code === 200) {
+                console.log("isLogin")
+            }else {
+              localStorage.removeItem("MiniAiUserId")
+              localStorage.removeItem("MiniAiToken")
+            }
+
+          })
+          .catch((error) => {
+            console.log(userId)
+            console.log(error)
+          })
+    }
+  },
+  mounted() {
+    console.log("check login")
+    this.checkLogin();
+  }
 }
 </script>
 

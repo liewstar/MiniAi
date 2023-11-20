@@ -36,7 +36,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     @Resource
     private RoleToUserMapper roleToUserMapper;
 
-    @Autowired
+    @Resource
     private RoleMapper roleMapper;
 
     @Autowired
@@ -74,6 +74,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         }
 
 
+    }
+
+    @Override
+    public int changeInfoByAdmin(User user) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("id",user.getId());
+        User checkUser = userMapper.selectOne(queryWrapper);
+        //新旧密码不一样才对密码加密
+        if(!checkUser.getPassword().equals(user.getPassword())) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+        int update = userMapper.update(user, queryWrapper);
+        return update;
     }
 
     public boolean addUser(User user) {

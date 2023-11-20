@@ -1,5 +1,4 @@
 import axios from 'axios';
-
 // 创建一个axios实例
 const api = axios.create({
     baseURL: 'http://localhost:8081', // 设置接口的基础URL
@@ -14,6 +13,7 @@ api.interceptors.request.use(
     },
     (error) => {
         // 处理请求错误
+        console.log("error")
         return Promise.reject(error);
     }
 );
@@ -25,7 +25,6 @@ api.interceptors.response.use(
         return response.data;
     },
     (error) => {
-        // 处理响应错误
         return Promise.reject(error);
     }
 );

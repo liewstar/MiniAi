@@ -16,6 +16,8 @@ public interface UserService extends IService<User> {
 
     int changePassword(String token, String oldPassword, String newPassword);
 
+    int changeInfoByAdmin(User user);
+
     boolean addUser(User user);
 
     List<User> selectUsersByUsername(String username);

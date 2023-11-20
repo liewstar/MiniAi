@@ -38,17 +38,23 @@
             style="width: 100%">
           <el-table-column
               prop="username"
-              label="姓名"
+              label="用户名"
               width="180">
           </el-table-column>
           <el-table-column
               prop="email"
-              label="邮箱"
+              label="下单日期"
               width="180">
           </el-table-column>
           <el-table-column
               prop="balance"
-              label="余额">
+              width="180"
+              label="套餐等级">
+          </el-table-column>
+          <el-table-column
+              prop="balance"
+              width="180"
+              label="到期时间">
           </el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">

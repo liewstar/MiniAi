@@ -10,10 +10,6 @@ import * as echarts from 'echarts'
 
 Vue.prototype.$echarts = echarts
 
-
-
-
-
 Vue.use(ElementUI);
 
 Vue.component('AdminLayout', AdminLayout)

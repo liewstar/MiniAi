@@ -96,7 +96,6 @@ export default {
 
       this.messageBody.conversationId = this.conversationId;
       //发送消息，得到流式响应
-      localStorage.setItem(new Date(),new Date())
       let botIndex = indexId +1
       const botMessage = {
         id:0,

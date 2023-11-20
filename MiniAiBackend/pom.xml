@@ -47,6 +47,7 @@
 
                 <!--suppress UnresolvedMavenProperty -->
                 <jwt.expire>604800</jwt.expire>
+<!--                <jwt.expire>60</jwt.expire>-->
                 <!--suppress UnresolvedMavenProperty -->
                 <jwt.secret>12345678</jwt.secret>
                 <!--suppress UnresolvedMavenProperty -->

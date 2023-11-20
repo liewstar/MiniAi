@@ -44,35 +44,117 @@
           </el-table>
         </el-card>
       </div>
+
+
+    <el-dialog title="修改信息" :visible.sync="dialogFormVisible">
+      <el-form :model="form">
+        <el-form-item label="用户名" :label-width="formLabelWidth">
+          <el-input v-model="form.username" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱" :label-width="formLabelWidth">
+          <el-input v-model="form.email" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="余额" :label-width="formLabelWidth">
+          <el-input v-model="form.balance" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" :label-width="formLabelWidth">
+          <el-input type="password" v-model="form.password" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="makeSure">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 
 </template>
 
 <script>
 import api from "@/api";
+import { MessageBox } from 'element-ui';
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Users",
   data() {
     return {
+      form: {
+        id:0,
+        username: '',
+        email:'',
+        balance:0,
+        password:''
+      },
+      formLabelWidth: '120px',
       username:'',
+      dialogFormVisible: false,
       tableData: [
         {
-          id:1,
-          email: '2935437378@qq.com',
-          username: '王小虎',
-          balance: 562
+          id:0,
+          email: '',
+          username: '',
+          balance: 0
         },
       ]
     }
   },
   methods: {
-    handleEdit(index, row) {
-      console.log(index, row);
+    makeSure() {
+      this.dialogFormVisible = false
+      api.post("/users/changeInfo",this.form,{
+        headers: {
+          'Content-Type':'application/json'
+        }
+      }).then(response => {
+        if(response.code === 200) {
+          this.$message.success("信息修改成功")
+          this.getData()
+        }else {
+          this.$message.error("信息修改失败，用户名已经存")
+        }
+      }).catch(error => {
+        this.$message.error("网络错误，请联系管理员"+error)
+      })
     },
-    handleDelete(index, row) {
-      console.log(index, row);
+    handleEdit(index) {
+      this.dialogFormVisible = true
+      if(index.email === '暂未设置') {
+        this.form.email = ''
+      }else {
+        this.form.email = index.email
+      }
+      this.form.password = index.password
+      this.form.balance = index.balance
+      this.form.username = index.username
+      this.form.id = index.id
+
+
+
+    },
+    handleDelete(index) {
+      var that = this
+      MessageBox.confirm('确定要删除吗？','提示',{
+        confirmButtonText:'确定',
+        cancelButtonText:'取消',
+        type: 'warning'
+      }).then(() => {
+        //删除用户
+        api.post("/users/delete?userId="+index.id)
+        .then(response => {
+          if(response.code === 200) {
+            this.$message.success("删除成功")
+            this.getData()
+          }else {
+            this.$message.error("删除失败")
+          }
+        })
+        .catch(error => {
+          that.$message.error("发生错误，请联系管理员"+error)
+        })
+      }).catch(() => {
+        this.$message.info("取消删除")
+      })
     },
     getData() {
       api.post("/users/selectUsers?username="+this.username)

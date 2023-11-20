@@ -1,6 +1,7 @@
 package com.example.miniaibackend.controller;
 
 import com.example.miniaibackend.domain.User;
+import com.example.miniaibackend.mapper.UserMapper;
 import com.example.miniaibackend.models.PasswordVO;
 import com.example.miniaibackend.models.Result;
 import com.example.miniaibackend.models.UserDTO;
@@ -35,6 +36,9 @@ public class UserController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Resource
+    UserMapper userMapper;
 
 
     //管理员查看用户
@@ -74,5 +78,16 @@ public class UserController {
     public Result<?> getRole(@RequestHeader("token") String token){
         List<String> roles = userService.getUserRoles(token);
         return Result.ok(roles);
+    }
+
+    @PostMapping("/changeInfo")
+    public Result<?> changeInfoByAdmin(@RequestBody User user) {
+        return Result.ok(userService.changeInfoByAdmin(user));
+    }
+
+    @PostMapping("/delete")
+    public Result<?> deleteUser(Integer userId) {
+        int i = userMapper.deleteById(userId);
+        return Result.ok(i);
     }
 }
