@@ -37,6 +37,14 @@ export default {
     }
   },
   methods:{
+    // checkIsLogin() {
+    //   var token = localStorage.getItem("MiniAiToken")
+    //   var user = localStorage.getItem("MiniAiUserId")
+    //   if(token && user) {
+    //
+    //   }
+    //
+    // }
     login() {
       const loginData = {
         username: this.username,

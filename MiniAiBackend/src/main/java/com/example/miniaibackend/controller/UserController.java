@@ -1,6 +1,9 @@
 package com.example.miniaibackend.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.example.miniaibackend.domain.Order;
 import com.example.miniaibackend.domain.User;
+import com.example.miniaibackend.mapper.OrderMapper;
 import com.example.miniaibackend.mapper.UserMapper;
 import com.example.miniaibackend.models.PasswordVO;
 import com.example.miniaibackend.models.Result;
@@ -39,6 +42,9 @@ public class UserController {
 
     @Resource
     UserMapper userMapper;
+
+    @Resource
+    OrderMapper orderMapper;
 
 
     //管理员查看用户
@@ -88,6 +94,10 @@ public class UserController {
     @PostMapping("/delete")
     public Result<?> deleteUser(Integer userId) {
         int i = userMapper.deleteById(userId);
+        //还要删除userid对应的订单
+        QueryWrapper<Order> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id", userId);
+        orderMapper.delete(queryWrapper);
         return Result.ok(i);
     }
 }

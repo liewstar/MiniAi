@@ -17,4 +17,16 @@
         id,user_id,order_date,
         order_amount,start_date,end_date
     </sql>
+    <select id="selectOrder" resultType="com.example.miniaibackend.models.OrderDTO">
+        select o.id,u.id as userId,u.username,o.order_date,o.order_amount,o.end_date from `order` o left join user u on u.id = o.user_id where 1=1
+        <if test="username != null">
+            AND u.username like CONCAT('%',#{username},'%')
+        </if>
+        <if test="orderDate != null" >
+            AND DATE(o.order_date) = DATE(#{orderDate})
+        </if>
+        <if test="orderAmount != null">
+            AND o.order_amount = #{orderAmount}
+        </if>
+    </select>
 </mapper>

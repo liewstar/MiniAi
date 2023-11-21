@@ -2,6 +2,7 @@ package com.example.miniaibackend.mapper;
 
 import com.example.miniaibackend.domain.Order;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.example.miniaibackend.models.OrderDTO;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -18,6 +19,7 @@ import java.util.Map;
 public interface OrderMapper extends BaseMapper<Order> {
 
 
+    List<OrderDTO> selectOrder(OrderDTO orderDTO);
 
 }
 

@@ -1,17 +1,17 @@
 package com.example.miniaibackend.controller;
 
-import com.example.miniaibackend.domain.Order;
+
+import com.example.miniaibackend.mapper.OrderMapper;
 import com.example.miniaibackend.models.OrderArg;
+import com.example.miniaibackend.models.OrderDTO;
 import com.example.miniaibackend.models.Result;
 import com.example.miniaibackend.service.OrderService;
 import jakarta.annotation.Resource;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.*;
 
-import javax.xml.crypto.Data;
+
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.List;
 
 @RestController
 @RequestMapping("/order")
@@ -24,6 +24,8 @@ import java.util.List;
 public class OrderController {
     @Resource
     OrderService orderService;
+    @Resource
+    OrderMapper orderMapper;
 
     //用户发送订单
     @PostMapping("/sendOrder")
@@ -33,12 +35,15 @@ public class OrderController {
 
     //管理员查看订单
     @PostMapping("/selectOrder")
-    public Result<?> selectOrder(@RequestBody OrderArg orderArg) {
-        System.out.println(orderArg);
-        return Result.ok(orderService.selectOrder(orderArg.getMap(),orderArg.getPageNum(),orderArg.getPageSize()));
+    public Result<?> selectOrder(@RequestBody OrderDTO orderDTO) {
+        return Result.ok(orderService.selectOrder(orderDTO));
     }
 
-    //管理员查看订单统计
+    @PostMapping("/delete")
+    public Result<?> deleteOrder(Integer orderId) {
+        int i = orderMapper.deleteById(orderId);
+        return Result.ok(i);
+    }
 
 
 

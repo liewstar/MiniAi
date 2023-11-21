@@ -3,6 +3,7 @@ package com.example.miniaibackend.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.example.miniaibackend.domain.Order;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.miniaibackend.models.OrderDTO;
 
 import javax.xml.crypto.Data;
 import java.math.BigDecimal;
@@ -18,7 +19,7 @@ import java.util.Map;
 public interface OrderService extends IService<Order> {
     Order sendOrder(Integer userId, BigDecimal orderAmount, int days);
 
-    IPage<Order> selectOrder(Map<String, Object> map,int pageNum, int pageSize);
+    List<OrderDTO> selectOrder(OrderDTO orderDTO);
 
 
 

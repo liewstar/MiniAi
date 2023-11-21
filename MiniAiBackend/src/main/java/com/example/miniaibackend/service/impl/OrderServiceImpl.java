@@ -6,10 +6,12 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.miniaibackend.domain.Order;
 import com.example.miniaibackend.domain.User;
+import com.example.miniaibackend.models.OrderDTO;
 import com.example.miniaibackend.service.OrderService;
 import com.example.miniaibackend.mapper.OrderMapper;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.xml.crypto.Data;
 import java.math.BigDecimal;
@@ -57,20 +59,25 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
         return newOrder;
     }
 
+//    @Override
+//    public IPage<Order> selectOrder(Map<String, Object> map,int pageNum, int pageSize) {
+//        System.out.println(pageNum);
+//        System.out.println(pageSize);
+//        Page<Order> page = new Page<>(pageNum, pageSize);
+//        QueryWrapper<Order> queryWrapper = new QueryWrapper<>();
+//        for (Map.Entry<String, Object> entry : map.entrySet()) {
+//            String key = entry.getKey();
+//            Object value = entry.getValue();
+//            if (value != null) {
+//                queryWrapper.eq(key, value);
+//            }
+//        }
+//        return orderMapper.selectPage(page, queryWrapper);
+//    }
+
     @Override
-    public IPage<Order> selectOrder(Map<String, Object> map,int pageNum, int pageSize) {
-        System.out.println(pageNum);
-        System.out.println(pageSize);
-        Page<Order> page = new Page<>(pageNum, pageSize);
-        QueryWrapper<Order> queryWrapper = new QueryWrapper<>();
-        for (Map.Entry<String, Object> entry : map.entrySet()) {
-            String key = entry.getKey();
-            Object value = entry.getValue();
-            if (value != null) {
-                queryWrapper.eq(key, value);
-            }
-        }
-        return orderMapper.selectPage(page, queryWrapper);
+    public List<OrderDTO> selectOrder(@RequestBody OrderDTO orderDTO) {
+       return orderMapper.selectOrder(orderDTO);
     }
 
 

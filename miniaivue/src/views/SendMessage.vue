@@ -216,8 +216,19 @@ export default {
       const preset = JSON.parse(presetData)
       let copyPreset = preset
       if(copyPreset) {
+        //提醒用户怎么使用
         this.messageBody.messageList = copyPreset
-        this.presetIndex = copyPreset.length
+        this.presetIndex = copyPreset.length;
+        var msg = ""
+        for(let i =0;i<copyPreset.length;i++) {
+          msg += copyPreset[i].role+":"+copyPreset[i].content+"\n";
+        }
+        this.$notify({
+          title: '提示',
+          message: msg,
+          duration: 0
+        });
+
         //删除预设记录
         localStorage.removeItem("preset")
       }
@@ -230,6 +241,7 @@ export default {
     if(this.arrMessage.length === 0) {
         this.addTitle = 1
     }
+
 
   },
   created() {
